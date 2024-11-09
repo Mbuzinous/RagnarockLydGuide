@@ -1,0 +1,121 @@
+﻿.adminCreateExhibition {
+    position: absolute;
+    top: 1.3rem;
+    right: 15rem;
+}
+
+.adminFilterByFloor {
+    position: absolute;
+    top: 1.3rem;
+    right: 1rem;
+}
+
+.adminEpisodeFloorNr2 {
+    place-self: center;
+    color: paleturquoise;
+}
+
+.adminEpisodeFloorNr3 {
+    place-self: center;
+    color: orchid;
+}
+
+.adminEpisodeIdAndTitle {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    font-size: 1.1rem;
+}
+
+.adminAccordion {
+    position: relative;
+    top: -0.2rem;
+}
+
+.adminButtonForFloorPlan-1 {
+    position: absolute;
+    top: 1.5rem;
+    left: 12.4rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.adminButtonForFloorPlan-2 {
+    position: absolute;
+    top: 8.4rem;
+    left: 19.9rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.adminButtonForFloorPlan-3 {
+    position: absolute;
+    top: 15.5rem;
+    left: 14.9rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.adminButtonForFloorPlan-4 {
+    position: absolute;
+    top: 30.2rem;
+    left: 19.9rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.adminButtonForFloorPlan-5 {
+    position: absolute;
+    top: 31.5rem;
+    left: 5.3rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.adminButtonForFloorPlan-6 {
+    position: absolute;
+    top: 22rem;
+    left: 7rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.adminButtonForFloorPlan-7 {
+    position: absolute;
+    top: 1.5rem;
+    right: 12.4rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.adminButtonForFloorPlan-8 {
+    position: absolute;
+    top: 9rem;
+    right: 19.5rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.adminButtonForFloorPlan-9 {
+    position: absolute;
+    top: 16.2rem;
+    right: 9.6rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.adminButtonForFloorPlan-10 {
+    position: absolute;
+    top: 30.4rem;
+    right: 4.9rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}
+
+.adminButtonForFloorPlan-11 {
+    position: absolute;
+    top: 25.7rem;
+    right: 19.5rem;
+    width: 4.8rem;
+    height: 4.8rem;
+}

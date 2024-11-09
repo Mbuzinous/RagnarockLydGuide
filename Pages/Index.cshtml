@@ -1,0 +1,21 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Forside";
+}
+<div class="frontPageCarouselItem">
+    <img src="/FrontPageImages/RagnarockEntrance1.jpg" class="d-block w-100 frontPageCarouselImage" alt="Ragnarock">
+</div>
+
+<article class="frontPageArticle">
+    <div class="frontPageMainHeading">
+        <h1 class="frontPage-H1"><strong>Ragnarocks Audio Guide</strong></h1>
+        <h2 class="frontPage-H2">Få en guide til Ragnarock museet, som du kan lytte til i dit eget tempo.</h2>
+        <a class="hr-frontPage"></a>
+        <a class="frontPage-H3" style="text-decoration: none;"asp-page="/Guide">
+            <h3>
+                Se hvordan
+            </h3>
+        </a>
+    </div>
+</article>

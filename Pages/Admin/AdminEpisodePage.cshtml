@@ -1,0 +1,121 @@
+﻿@page
+@using System.Runtime.InteropServices
+@model AdminEpisodePage
+@{
+}
+<div class="adminCreateExhibition">
+    <a class="btn btn-success" asp-page="/Admin/CreateExhibition">Opret nyt</a>
+</div>
+<form method="get" class="adminFilterByFloor">
+    <div class="input-group mb-3">
+        <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon" input type="text" asp-for="FilterCriteria">
+            <option value="" selected>Vælg Etage...</option>
+            <option value="">Reset</option>
+            <option value="2">Etage 2</option>
+            <option value="3">Etage 3</option>
+        </select>
+        <button class="btn btn-outline-secondary" type="submit">Filter</button>
+    </div>
+</form>
+<div class="exhibition-grid">
+    <div class="floorNumber">
+        <h1>AdminPage</h1>
+    </div>
+    <div class="episode">
+        @foreach (var exhibition in Model.Exhibitions)
+        {
+            <div id="EpisodeID-@exhibition.ExhibitionNumber">
+                <article class="adminEpisodeIdAndTitle">
+                    @if (@exhibition.ExhibitionNumber <= 0)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            <p>@exhibition.ExhibitionNumber - MANGLER Exhibition Nummer</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <p>@exhibition.ExhibitionNumber-</p>
+                    }
+                    <p class="episodeTitle">@exhibition.Title</p>
+                    @if (@exhibition.FloorNumber == 2)
+                    {
+                        <p class="adminEpisodeFloorNr2">Etage nummer: @exhibition.FloorNumber</p>
+                    }
+                    else
+                    {
+                        <p class="adminEpisodeFloorNr3">Etage nummer: @exhibition.FloorNumber</p>
+                    }
+                </article>
+                <hr class="episodeTop-Line">
+                <img class="episodePicture" src="/exhibitionPhotos/@exhibition.ImageFileName" width="50" alt="Du har ikke tilføjet et billede" />
+                <div class="accordion accordion-flush adminAccordion" id="accordionFlush_@exhibition.Id">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-@exhibition.Id" aria-expanded="true" aria-controls="flush-collapse-@exhibition.Id">
+                                Beskrivelse af udstilling
+                            </button>
+                        </h2>
+                        <div id="flush-collapse-@exhibition.Id" class="accordion-collapse collapse" data-bs-parent="#accordionFlush_@exhibition.Id">
+                            <div class="accordion-body" style="color: black">
+                                <p class="episodeDescription">@exhibition.Description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>                    <td style="white-space: nowrap">
+                    <a class="btn btn-warning btn-sm" href="/Admin/EditExhibition?id=@exhibition.Id">Opdater</a>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#sletModal_@exhibition.Id">Slet</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="sletModal_@exhibition.Id" tabindex="-1" aria-labelledby="sletModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="sletModalLabel" style="color:black;">Er du sikker på du vil slette denne udstillingen @exhibition.Title?</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">Fortryd</button>
+                                    <a class="btn btn-danger btn-sm" href="/Admin/DeleteExhibition?id=@exhibition.Id">Slet</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <button class="playButton" onclick="playAudio(this, '@exhibition.Id')">Play</button>
+                <audio id="@exhibition.Id" style="display: none;">
+                    <source id="source-@exhibition.Id" src="/exhibitionAudios/@exhibition.AudioFileName" type="audio/mpeg">
+                </audio>
+            </div>
+
+        }
+    </div>
+    <div class="sticky-container-for-plantegning">
+        <div class="floorPlan">
+            <td>
+                <img src="/Plantegninger/Etage2.jpg" height="672" width="474" alt="Plantegning for Rockmuseet" />
+                <img src="/Plantegninger/Etage3.jpg" height="672" width="474" alt="Plantegning for Rockmuseet" />
+            </td>
+            @foreach (var exhibition in Model.Exhibitions)
+            {
+
+                <a class="adminButtonForFloorPlan-@exhibition.ExhibitionNumber" href="#EpisodeID-@exhibition.ExhibitionNumber"></a>
+
+            }
+        </div>
+    </div>
+    <div class="audioStuff hideAudioStuff">
+        <div class="bottom-player-pic">
+            <img id="bottom-player-image" width="57" height="73" src="" alt="">
+        </div>
+        <div class="bottom-player-title">
+            <p id="bottom-player-title"></p>
+        </div>
+        <audio controls class="bottom-audio">
+            <source id="bottom-audio-source" src="" type="audio/mpeg">
+        </audio>
+    </div>
+</div>
+
+
+
