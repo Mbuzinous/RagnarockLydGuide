@@ -1,7 +1,8 @@
 using Kojg_Ragnarock_Guide.Interfaces;
 using Kojg_Ragnarock_Guide.Models;
 using Kojg_Ragnarock_Guide.Services;
-using RagnarockTourGuide.Services.ExhibitionServices;
+using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Services;
 
 namespace RagnarockTourGuide
 {
@@ -15,8 +16,7 @@ namespace RagnarockTourGuide
             builder.Services.AddRazorPages();
 
             builder.Services.AddTransient<ICRUDRepository<Exhibition>, ExhibitionCRUDRepository>();
-            builder.Services.AddTransient<IImageFileRepository, ImageFileRepository>();
-            builder.Services.AddTransient<IAudioFileRepository, AudioFileRepository>();
+            builder.Services.AddTransient<IFIleRepository<IFormFile>, FileRepository>();
 
             var app = builder.Build();
 

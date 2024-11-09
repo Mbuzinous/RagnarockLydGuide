@@ -39,7 +39,7 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
             toBeUpdatedExhibition = repo.GetById(id);
         }
 
-        public void OnPost(int id)
+        public async Task OnPost(int id)
         {
             //Validate ID
             if (id == null)
@@ -56,7 +56,7 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
             }
 
             //Update Exhibition in database
-            repo.Update(toBeUpdatedExhibition, oldExhibition);
+            await repo.Update(toBeUpdatedExhibition, oldExhibition);
 
             SuccessMessage = "Udstilling blev opdateret";
 

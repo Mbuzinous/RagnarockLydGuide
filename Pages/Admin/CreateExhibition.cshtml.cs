@@ -12,7 +12,7 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
         private ICRUDRepository<Exhibition> repo;
 
         [BindProperty]
-        public Exhibition Exhibition { get; set; } = new Exhibition();
+        public Exhibition Exhibition { get; set; }
 
         //Making some empty string messages i use in html razer pages, lower i define them
         public string ErrorMessage { get; private set; } = "";
@@ -28,7 +28,7 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
         }
 
 
-        public void OnPost()
+        public async Task OnPost()
         {
             //Validate Input
             if (Exhibition.ImageFile == null)
@@ -49,7 +49,7 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
             else
             {
                 //Save Exhibition
-                repo.Create(Exhibition);
+                await repo.Create(Exhibition);
 
                 ModelState.Clear();
 

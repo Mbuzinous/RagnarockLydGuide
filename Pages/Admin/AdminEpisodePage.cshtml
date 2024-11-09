@@ -1,6 +1,6 @@
 ﻿@page
-@using System.Runtime.InteropServices
-@model AdminEpisodePage
+@using Kojg_Ragnarock_Guide.Models
+@model Kojg_Ragnarock_Guide.Pages.Admin.AdminEpisodePage
 @{
 }
 <div class="adminCreateExhibition">
@@ -22,7 +22,7 @@
         <h1>AdminPage</h1>
     </div>
     <div class="episode">
-        @foreach (var exhibition in Model.Exhibitions)
+        @foreach (Exhibition exhibition in Model.Exhibitions)
         {
             <div id="EpisodeID-@exhibition.ExhibitionNumber">
                 <article class="adminEpisodeIdAndTitle">
@@ -47,7 +47,7 @@
                     }
                 </article>
                 <hr class="episodeTop-Line">
-                <img class="episodePicture" src="/exhibitionPhotos/@exhibition.ImageFileName" width="50" alt="Du har ikke tilføjet et billede" />
+                <img class="episodePicture" src="/exhibitionImages/@exhibition.ImageFileName" width="50" alt="Du har ikke tilføjet et billede" />
                 <div class="accordion accordion-flush adminAccordion" id="accordionFlush_@exhibition.Id">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
@@ -84,7 +84,7 @@
                 </td>
                 <button class="playButton" onclick="playAudio(this, '@exhibition.Id')">Play</button>
                 <audio id="@exhibition.Id" style="display: none;">
-                    <source id="source-@exhibition.Id" src="/exhibitionAudios/@exhibition.AudioFileName" type="audio/mpeg">
+                    <source id="source-@exhibition.Id" src="/exhibitionAudios/@exhibition.AudioFileName" type="audio/mp3">
                 </audio>
             </div>
 
@@ -112,7 +112,7 @@
             <p id="bottom-player-title"></p>
         </div>
         <audio controls class="bottom-audio">
-            <source id="bottom-audio-source" src="" type="audio/mpeg">
+            <source id="bottom-audio-source" src="" type="audio/mp3">
         </audio>
     </div>
 </div>
