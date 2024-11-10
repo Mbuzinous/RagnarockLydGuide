@@ -1,6 +1,4 @@
-﻿using Kojg_Ragnarock_Guide.Models;
-
-namespace Kojg_Ragnarock_Guide.Interfaces
+﻿namespace Kojg_Ragnarock_Guide.Interfaces
 {
     public interface ICRUDRepository<T>
     {
@@ -12,5 +10,6 @@ namespace Kojg_Ragnarock_Guide.Interfaces
         void Delete(int id);
 
         List<T> FilterListByNumber(List<T> listofT, int filterNumber);
+        Task<List<int>> GetUsedExhibitionNumbersAsync();
     }
 }

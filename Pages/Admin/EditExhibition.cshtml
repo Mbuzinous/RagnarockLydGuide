@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id:int}"
 @model Kojg_Ragnarock_Guide.Pages.Admin.EditExhibitionModel
 @{
 }
@@ -11,26 +11,20 @@
             <h2 class="text-center mb-5">Updater udstilling</h2>
 
             <form method="post" enctype="multipart/form-data">
+                
                 <div class="row mb-3">
                     <label class=" col-sm-4 col-form-label">ID</label>
                     <div class="col-sm-8">
                         <input readonly class="form-control-plaintext" value="@Model.toBeUpdatedExhibition.Id">
                     </div>
                 </div>
-
+                
                 <div class="row mb-3">
                     <label class=" col-sm-4 col-form-label">Titel</label>
                     <div class="col-sm-8">
                         <input class="form-control" asp-for="toBeUpdatedExhibition.Title">
                         <span asp-validation-for="toBeUpdatedExhibition.Title" class="text-danger"></span>
-                    </div>
-                </div>
 
-                <div class="row mb-3">
-                    <label class=" col-sm-4 col-form-label">Udstillings Nummer</label>
-                    <div class="col-sm-8">
-                        <input class="form-control" asp-for="toBeUpdatedExhibition.ExhibitionNumber">
-                        <span asp-validation-for="toBeUpdatedExhibition.ExhibitionNumber" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -43,39 +37,50 @@
                 </div>
 
                 <div class="row mb-3">
+                    <label class="col-sm-4 col-form-label">Udstillingsnummer</label>
+                    <div class="col-sm-8">
+                        <select class="form-select" asp-for="toBeUpdatedExhibition.ExhibitionNumber">
+                            @foreach (var number in Model.SuggestedExhibitionNumbers)
+                            {
+                                <option value="@number">@number</option>
+                            }
+                        </select>
+                        <span asp-validation-for="toBeUpdatedExhibition.ExhibitionNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
                     <label class=" col-sm-4 col-form-label">Etage</label>
                     <div class="col-sm-8">
                         <select class="form-select" asp-for="toBeUpdatedExhibition.FloorNumber">
+
                             <option value="2">2</option>
                             <option value="3">3</option>
+
                         </select>
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <label class=" col-sm-4 col-form-label"></label>
                     <div class="col-sm-8">
-                        <img src="/exhibitionPhotos/@Model.toBeUpdatedExhibition.ImageFileName" width="150" />
+                        <img src="/exhibitionImages/@Model.toBeUpdatedExhibition.ImageFileName" width="150" />
                     </div>
                 </div>
-
                 <div class="row mb-3">
-                    <label class=" col-sm-4 col-form-label">Billed Fil</label>
+                    <label class=" col-sm-4 col-form-label">Billedfil</label>
                     <div class="col-sm-8">
                         <input class="form-control" asp-for="toBeUpdatedExhibition.ImageFile">
                         <span asp-validation-for="toBeUpdatedExhibition.ImageFile" class="text-danger"></span>
                     </div>
                 </div>
 
-
                 <div class="row mb-3">
-                    <label class=" col-sm-4 col-form-label">Audio Fil</label>
+                    <label class=" col-sm-4 col-form-label">Lydfil</label>
                     <div class="col-sm-8">
                         <input class="form-control" asp-for="toBeUpdatedExhibition.AudioFile">
                         <span asp-validation-for="toBeUpdatedExhibition.AudioFile" class="text-danger"></span>
                     </div>
                 </div>
-
                 <div class="row mb-3">
                     <div class="offset-sm-4 col-sm-4 d-grid">
                         <button type="submit" class="editButtonOpdater">Opdater</button>

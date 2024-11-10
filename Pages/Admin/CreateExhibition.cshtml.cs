@@ -14,13 +14,18 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
         [BindProperty]
         public Exhibition Exhibition { get; set; }
 
+        public List<int> SuggestedExhibitionNumbers { get; private set; } = new List<int>();    
+
         public CreateExhibitionModel(ICRUDRepository<Exhibition> repository)
         {
             _repo = repository;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            var usedNumbers = await _repo.GetUsedExhibitionNumbersAsync();
+            SuggestedExhibitionNumbers = Enumerable.Range(1, 100).Except(usedNumbers).ToList();
+
             return Page();
         }
 
@@ -37,5 +42,6 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
 
             return RedirectToPage("AdminEpisodePage");
         }
+
     }
 }

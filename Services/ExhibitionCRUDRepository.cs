@@ -104,25 +104,25 @@ namespace RagnarockTourGuide.Services
         }
         public async Task Update(Exhibition toBeUpdatedExhibition, Exhibition oldExhibition)
         {
-            using (SqlConnection conn = new SqlConnection(_connectionString))
-            {
-                string query = "UPDATE Exhibitions SET ExhibitionNumber = @ExhibitionNumber, FloorNumber = @FloorNumber, " +
-                               "Title = @Title, Description = @Description, ImageFileName = @ImageFileName, AudioFileName = @AudioFileName " +
-                               "WHERE Id = @Id";
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    string query = "UPDATE Exhibitions SET ExhibitionNumber = @ExhibitionNumber, FloorNumber = @FloorNumber, " +
+                                   "Title = @Title, Description = @Description, ImageFileName = @ImageFileName, AudioFileName = @AudioFileName " +
+                                   "WHERE Id = @Id";
 
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Id", toBeUpdatedExhibition.Id);
-                cmd.Parameters.AddWithValue("@ExhibitionNumber", toBeUpdatedExhibition.ExhibitionNumber);
-                cmd.Parameters.AddWithValue("@FloorNumber", toBeUpdatedExhibition.FloorNumber);
-                cmd.Parameters.AddWithValue("@Title", toBeUpdatedExhibition.Title);
-                cmd.Parameters.AddWithValue("@Description", toBeUpdatedExhibition.Description);
-                cmd.Parameters.AddWithValue("@ImageFileName", await _fileRepository.UpdateFileAsync(toBeUpdatedExhibition.ImageFile, oldExhibition.ImageFileName, _imageFileTarget));
-                cmd.Parameters.AddWithValue("@AudioFileName", await _fileRepository.UpdateFileAsync(toBeUpdatedExhibition.AudioFile, oldExhibition.AudioFileName, _audioFileTarget));
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@Id", toBeUpdatedExhibition.Id);
+                    cmd.Parameters.AddWithValue("@ExhibitionNumber", toBeUpdatedExhibition.ExhibitionNumber);
+                    cmd.Parameters.AddWithValue("@FloorNumber", toBeUpdatedExhibition.FloorNumber);
+                    cmd.Parameters.AddWithValue("@Title", toBeUpdatedExhibition.Title);
+                    cmd.Parameters.AddWithValue("@Description", toBeUpdatedExhibition.Description);
+                    cmd.Parameters.AddWithValue("@ImageFileName", await _fileRepository.UpdateFileAsync(toBeUpdatedExhibition.ImageFile, oldExhibition.ImageFileName, _imageFileTarget));
+                    cmd.Parameters.AddWithValue("@AudioFileName", await _fileRepository.UpdateFileAsync(toBeUpdatedExhibition.AudioFile, oldExhibition.AudioFileName, _audioFileTarget));
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
             }
-        }
         public void Delete(int id)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -148,6 +148,27 @@ namespace RagnarockTourGuide.Services
                 }
             }
             return filteredList;
+        }
+        public async Task<List<int>> GetUsedExhibitionNumbersAsync()
+        {
+            List<int> usedNumbers = new List<int>();
+
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT ExhibitionNumber FROM Exhibitions";
+                SqlCommand cmd = new SqlCommand(query, conn);
+
+                conn.Open();
+                using (var reader = await cmd.ExecuteReaderAsync())
+                {
+                    while (reader.Read())
+                    {
+                        usedNumbers.Add(reader.GetInt32(0));
+                    }
+                }
+            }
+
+            return usedNumbers;
         }
 
     }

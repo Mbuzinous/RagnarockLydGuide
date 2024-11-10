@@ -15,42 +15,36 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
 
         [BindProperty]
         public Exhibition toBeUpdatedExhibition { get; set; } = new Exhibition();
+        public List<int> SuggestedExhibitionNumbers { get; private set; } = new List<int>();
+
 
         public EditExhibitionModel(ICRUDRepository<Exhibition> repository)
         {
             _repo = repository;
+
         }
         //Making some empty string messages i use in html razer pages, lower i define them
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
-            //Validate ID
-            if (_repo.GetById(id) == null)
-            {
-                return RedirectToPage("AdminEpisodePage");
-            }
-
             oldExhibition = _repo.GetById(id);
+            toBeUpdatedExhibition = oldExhibition;
 
-            //Display Exhibition
-            toBeUpdatedExhibition = _repo.GetById(id);
+            var usedNumbers = await _repo.GetUsedExhibitionNumbersAsync();
+            SuggestedExhibitionNumbers = Enumerable.Range(1, 100).Except(usedNumbers).ToList();
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPost(int id)
+        public async Task<IActionResult> OnPost()
         {
-            //Validate ID
-            if (_repo.GetById(id) == null)
-            {
-                return RedirectToPage("AdminEpisodePage");
-            }
-            //Validate Model State
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-
-            //Update Exhibition
+            //Save Exhibition
             await _repo.Update(toBeUpdatedExhibition, oldExhibition);
+
+            ModelState.Clear();
 
             return RedirectToPage("AdminEpisodePage");
         }

@@ -62,7 +62,8 @@
                         </div>
                     </div>
                 </div>                    <td style="white-space: nowrap">
-                    <a class="btn btn-warning btn-sm" href="/Admin/EditExhibition?id=@exhibition.Id">Opdater</a>
+                    <a class="btn btn-warning btn-sm" asp-page="/Admin/EditExhibition" asp-route-id="@exhibition.Id">Opdater</a>
+
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#sletModal_@exhibition.Id">Slet</button>
 
