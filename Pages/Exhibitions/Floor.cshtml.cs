@@ -8,21 +8,30 @@ namespace Kojg_Ragnarock_Guide.Pages.Exhibitions
 {
     public class FloorNumber : PageModel
     {
-        private ICRUDRepository<Exhibition> repo;
+        private ICRUDRepository<Exhibition> _repo;
 
         public List<Exhibition> Exhibitions { get; private set; } = new List<Exhibition>();
 
-        [BindProperty(SupportsGet = true)]
-        public string FilterCriteria { get; set; }
+        public int FloorNr { get; set; }
 
         public FloorNumber(ICRUDRepository<Exhibition> repository)
         {
-            repo = repository;
+            _repo = repository;
         }
 
-        public void OnGet()
+        public IActionResult OnGet(int id)
         {
-            Exhibitions = repo.GetAll();
+            FloorNr = id;
+            if (id == 2 || id == 3)
+            {
+                Exhibitions = _repo.FilterListByNumber(_repo.GetAll(), id);
+            }
+            else
+            {
+                Exhibitions = _repo.GetAll();
+            }
+
+            return Page();
         }
     }
 }

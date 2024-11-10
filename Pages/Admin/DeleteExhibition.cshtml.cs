@@ -1,32 +1,30 @@
 using Kojg_Ragnarock_Guide.Interfaces;
 using Kojg_Ragnarock_Guide.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Kojg_Ragnarock_Guide.Pages.Admin
 {
     public class DeleteExhibitionModel : PageModel
     {
-        private ICRUDRepository<Exhibition> repo;
+        private ICRUDRepository<Exhibition> _repo;
 
         public DeleteExhibitionModel(ICRUDRepository<Exhibition> repository)
         {
-            repo = repository;
+            _repo = repository;
         }
-        public void OnGet(int id)
+        public IActionResult OnGet(int id)
         {
             //Validate ID
-            if (id == null)
+            if (_repo.GetById(id) != null)
             {
-                Response.Redirect("/Admin/AdminEpisodePage");
-                return;
+                //Delete Exhibition
+                _repo.Delete(id);
+
+                return RedirectToPage("AdminEpisodePage");
             }
-
-            //Delete Exhibition
-            repo.Delete(id);
-
-            //redirect to Index page
-            Response.Redirect("/Admin/AdminEpisodePage");
+            return RedirectToPage("AdminEpisodePage");
         }
     }
 }

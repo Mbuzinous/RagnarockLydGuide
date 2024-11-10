@@ -136,5 +136,19 @@ namespace RagnarockTourGuide.Services
                 cmd.ExecuteNonQuery();
             }
         }
+        public List<Exhibition> FilterListByNumber(List<Exhibition> exhibitions, int floorNr)
+        {
+            List<Exhibition> filteredList = new List<Exhibition>();
+
+            foreach (Exhibition existingExhibition in exhibitions)
+            {
+                if (existingExhibition.FloorNumber == floorNr)
+                {
+                    filteredList.Add(existingExhibition);
+                }
+            }
+            return filteredList;
+        }
+
     }
 }

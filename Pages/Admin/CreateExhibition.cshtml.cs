@@ -9,54 +9,33 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
 
     public class CreateExhibitionModel : PageModel
     {
-        private ICRUDRepository<Exhibition> repo;
+        private ICRUDRepository<Exhibition> _repo;
 
         [BindProperty]
         public Exhibition Exhibition { get; set; }
 
-        //Making some empty string messages i use in html razer pages, lower i define them
-        public string ErrorMessage { get; private set; } = "";
-        public string SuccessMessage { get; private set; } = "";
-
         public CreateExhibitionModel(ICRUDRepository<Exhibition> repository)
         {
-            repo = repository;
+            _repo = repository;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            return Page();
         }
 
-
-        public async Task OnPost()
+        public async Task<IActionResult> OnPost()
         {
-            //Validate Input
-            if (Exhibition.ImageFile == null)
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("Exhibition.ImageFile", "Du er nødt til at uploade et billed");
+                return Page();
             }
+            //Save Exhibition
+            await _repo.Create(Exhibition);
 
-            else if (Exhibition.AudioFile == null)
-            {
-                ModelState.AddModelError("Exhibition.AudioFile", "Du er nødt til at uploade mp3 lydfil");
-            }
+            ModelState.Clear();
 
-            else if (!ModelState.IsValid)
-            {
-                ErrorMessage = "Udfyld venligst alle ledige felter";
-                return;
-            }
-            else
-            {
-                //Save Exhibition
-                await repo.Create(Exhibition);
-
-                ModelState.Clear();
-
-                SuccessMessage = "Udstilling er nu oprettet";
-
-                Response.Redirect("/Admin/AdminEpisodePage");
-            }
+            return RedirectToPage("AdminEpisodePage");
         }
     }
 }

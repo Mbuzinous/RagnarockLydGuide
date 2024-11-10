@@ -11,6 +11,6 @@ namespace Kojg_Ragnarock_Guide.Interfaces
         Task Update(T toBeUpdatedT, T oldT);
         void Delete(int id);
 
-        //List<T> Filter(string floorNr);
+        List<T> FilterListByNumber(List<T> listofT, int filterNumber);
     }
 }

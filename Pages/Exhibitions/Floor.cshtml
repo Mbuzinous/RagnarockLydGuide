@@ -1,20 +1,20 @@
-﻿@page
+﻿@page "{id:int}"
 @model Kojg_Ragnarock_Guide.Pages.Exhibitions.FloorNumber
 @{
 }
 <div class="exhibition-grid">
     <div class="floorNumber">
-        @foreach (var ex in Model.Exhibitions)
-        {
-            if (ex.FloorNumber == 2)
+        @{
+
+
+            if (Model.FloorNr == 2)
             {
                 <h1>Etage 2</h1>
-                break;
             }
-            if (ex.FloorNumber == 3)
+
+            else if (Model.FloorNr == 3)
             {
                 <h1>Etage 3</h1>
-                break;
             }
         }
     </div>
@@ -30,7 +30,7 @@
                         <p class="episodeTitle">@exhibition.Title</p>
                     </article>
                     <hr class="episodeTop-Line">
-                    <img class="episodePicture" src="/exhibitionPhotos/@exhibition.ImageFileName" width="50" alt="Du har ikke tilføjet et billede" />
+                    <img class="episodePicture" src="/exhibitionImages/@exhibition.ImageFileName" width="50" alt="Du har ikke tilføjet et billede" />
                     <div class="accordion accordion-flush" id="accordionFlush_@exhibition.Id">
                         <div class="accordion-item">
                             <h2 class="accordion-header">
@@ -56,24 +56,21 @@
     </div>
     <div class="sticky-container-for-FloorPlan">
         <div class="floorPlan">
-            @foreach (var ex in Model.Exhibitions)
-            {
-                if (ex.FloorNumber == 2)
+            @{
+                if (Model.FloorNr == 2)
                 {
                     <td><img src="/Plantegninger/Etage2.jpg" height="672" width="474" alt="FloorNumber Plan for Rockmuseet" /></td>
-                    break;
                 }
-                if (ex.FloorNumber == 3)
+                if (Model.FloorNr == 3)
                 {
                     <td><img src="/Plantegninger/Etage3.jpg" height="672" width="474" alt="FloorNumber Plan for Rockmuseet" /></td>
-                    break;
                 }
             }
             @foreach (var exhibition in Model.Exhibitions)
             {
-
-                <a class="buttonForFloorPlan-@exhibition.ExhibitionNumber" href="#EpisodeID-@exhibition.ExhibitionNumber"></a>
-
+                <a type="button" class="adminButtonForFloorPlan-@exhibition.ExhibitionNumber"
+                   onclick="document.getElementById('EpisodeID-@exhibition.ExhibitionNumber').scrollIntoView({ behavior: 'smooth' });">
+                </a>
             }
         </div>
     </div>

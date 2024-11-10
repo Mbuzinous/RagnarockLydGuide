@@ -8,20 +8,28 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
 {
     public class AdminEpisodePage : PageModel
     {
-        private ICRUDRepository<Exhibition> repo;
+        private ICRUDRepository<Exhibition> _repo;
 
         public List<Exhibition> Exhibitions { get; private set; } = new List<Exhibition>();
 
         [BindProperty(SupportsGet = true)]
-        public string FilterCriteria { get; set; }
+        public int FilterCriteria { get; set; }
 
         public AdminEpisodePage(ICRUDRepository<Exhibition> repository)
         {
-            repo = repository;
+            _repo = repository;
         }
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            Exhibitions = repo.GetAll();
+            if (FilterCriteria == 2 || FilterCriteria == 3)
+            {
+                Exhibitions = _repo.FilterListByNumber(_repo.GetAll(), FilterCriteria);
+            }
+            else
+            {
+                Exhibitions = _repo.GetAll();
+            }
+            return Page();
         }
     }
 }

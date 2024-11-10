@@ -8,7 +8,7 @@
 </div>
 <form method="get" class="adminFilterByFloor">
     <div class="input-group mb-3">
-        <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon" input type="text" asp-for="FilterCriteria">
+        <select class="form-select" id="inputGroupSelect03" aria-label="Select floor" asp-for="FilterCriteria">
             <option value="" selected>Vælg Etage...</option>
             <option value="">Reset</option>
             <option value="2">Etage 2</option>
@@ -98,9 +98,9 @@
             </td>
             @foreach (var exhibition in Model.Exhibitions)
             {
-
-                <a class="adminButtonForFloorPlan-@exhibition.ExhibitionNumber" href="#EpisodeID-@exhibition.ExhibitionNumber"></a>
-
+                <a type="button" class="adminButtonForFloorPlan-@exhibition.ExhibitionNumber"
+                        onclick="document.getElementById('EpisodeID-@exhibition.ExhibitionNumber').scrollIntoView({ behavior: 'smooth' });">
+                </a>
             }
         </div>
     </div>
