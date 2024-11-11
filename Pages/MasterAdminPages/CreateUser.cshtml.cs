@@ -1,43 +1,49 @@
 using Kojg_Ragnarock_Guide.Interfaces;
 using Kojg_Ragnarock_Guide.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Models;
 
-namespace Kojg_Ragnarock_Guide.Pages.Admin
+namespace RagnarockTourGuide.Pages.MasterAdminPages
 {
-    public class DeleteExhibitionModel : PageModel
+    public class CreateUserModel : PageModel
     {
-        private IExhibitionCRUDRepoistory<Exhibition> _repo;
+        private readonly IUserCRUDRepository<User> _repository;
+
+        [BindProperty]
+        public User NewUser { get; set; } = new User();
 
         private IUserValidator _userValidator;
-        public DeleteExhibitionModel(IExhibitionCRUDRepoistory<Exhibition> repository, IUserValidator userValidator)
+        public CreateUserModel(IUserCRUDRepository<User> repository, IUserValidator userValidator)
         {
-            _repo = repository;
+            _repository = repository;
             _userValidator = userValidator;
         }
-        public IActionResult OnGet(int id)
+
+        public IActionResult OnGet()
         {
             // Hent brugerens rolle fra sessionen
             Role userRole = _userValidator.GetUserRole(HttpContext.Session);
 
             // Tjek om brugeren har adgang baseret på rollen
-            if (userRole != Role.Admin || userRole != Role.MasterAdmin)
+            if (userRole != Role.MasterAdmin)
             {
                 // Omdirigér til forsiden, hvis brugeren ikke har den nødvendige rolle
                 return RedirectToPage("/Index");
             }
-            //Validate ID
-            if (_repo.GetById(id) != null)
+            return Page();
+        }
+        public IActionResult OnPost()
+        {
+            if (!ModelState.IsValid)
             {
-                //Delete Exhibition
-                _repo.Delete(id);
-
-                return RedirectToPage("AdminEpisodePage");
+                return Page();
             }
-            return RedirectToPage("AdminEpisodePage");
+
+            _repository.CreateAsync(NewUser);
+            return RedirectToPage("DisplayUsers");
         }
     }
 }

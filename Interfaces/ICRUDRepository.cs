@@ -3,13 +3,15 @@
     public interface ICRUDRepository<T>
     {
 
-        Task Create(T toBeCreatedT);
+        Task CreateAsync(T toBeCreatedT);
         T GetById(int id);
         List<T> GetAll();
-        Task Update(T toBeUpdatedT, T oldT);
-        void Delete(int id);
-
-        List<T> FilterListByNumber(List<T> listofT, int filterNumber);
-        Task<List<int>> GetUsedExhibitionNumbersAsync();
+        Task UpdateAsync(T toBeUpdatedT, T oldT);
+        
+        
+        
+        
+        /*Move Delete method to specific repo fx. (IQuizRepository)*/
+        //void Delete(int id);      
     }
 }

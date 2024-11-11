@@ -3,13 +3,15 @@ using Kojg_Ragnarock_Guide.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RagnarockTourGuide.Enums;
+using RagnarockTourGuide.Interfaces;
 
 namespace Kojg_Ragnarock_Guide.Pages.Admin
 {
     public class EditExhibitionModel : PageModel
     {
 
-        private ICRUDRepository<Exhibition> _repo;
+        private IExhibitionCRUDRepoistory<Exhibition> _repo;
 
         public Exhibition oldExhibition { get; set; } = new Exhibition();
 
@@ -18,18 +20,29 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
         public List<int> SuggestedExhibitionNumbers { get; private set; } = new List<int>();
 
 
-        public EditExhibitionModel(ICRUDRepository<Exhibition> repository)
+        private IUserValidator _userValidator;
+        public EditExhibitionModel(IExhibitionCRUDRepoistory<Exhibition> repository, IUserValidator userValidator)
         {
             _repo = repository;
-
+            _userValidator = userValidator;
         }
         //Making some empty string messages i use in html razer pages, lower i define them
         public async Task<IActionResult> OnGet(int id)
         {
+            // Hent brugerens rolle fra sessionen
+            Role userRole = _userValidator.GetUserRole(HttpContext.Session);
+
+            // Tjek om brugeren har adgang baseret på rollen
+            if (userRole != Role.Admin || userRole != Role.MasterAdmin)
+            {
+                // Omdirigér til forsiden, hvis brugeren ikke har den nødvendige rolle
+                return RedirectToPage("/Index");
+            }
+
             oldExhibition = _repo.GetById(id);
             toBeUpdatedExhibition = oldExhibition;
 
-            var usedNumbers = await _repo.GetUsedExhibitionNumbersAsync();
+            var usedNumbers = await _repo.GetUsedNumbersAsync();
             SuggestedExhibitionNumbers = Enumerable.Range(1, 100).Except(usedNumbers).ToList();
 
             return Page();
@@ -42,7 +55,7 @@ namespace Kojg_Ragnarock_Guide.Pages.Admin
                 return Page();
             }
             //Save Exhibition
-            await _repo.Update(toBeUpdatedExhibition, oldExhibition);
+            await _repo.UpdateAsync(toBeUpdatedExhibition, oldExhibition);
 
             ModelState.Clear();
 

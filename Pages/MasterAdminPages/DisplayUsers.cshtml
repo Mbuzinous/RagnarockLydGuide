@@ -1,0 +1,32 @@
+﻿@page
+@model RagnarockTourGuide.Pages.MasterAdminPages.DisplayUsersModel
+@{
+}
+<h2>Users List</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+                <td>
+                    <a asp-page="EditUser" asp-route-id="@user.Id">Edit</a> |
+                    <a asp-page="UserDetails" asp-route-id="@user.Id">Details</a> |
+                    <a asp-page="DeleteUser" asp-route-id="@user.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-page="CreateUser" class="btn btn-primary">Create New User</a>

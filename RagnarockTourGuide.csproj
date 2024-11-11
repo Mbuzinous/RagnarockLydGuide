@@ -52,6 +52,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\exhibitionImages\" />
     <Folder Include="wwwroot\exhibitionAudios\" />
+    <Folder Include="wwwroot\userImages\" />
   </ItemGroup>
 
 </Project>

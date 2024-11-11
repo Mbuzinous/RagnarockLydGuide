@@ -1,0 +1,16 @@
+﻿@page
+@model RagnarockTourGuide.Pages.MasterAdminPages.UserDetailsModel
+@{
+}
+<h2>User Details</h2>
+<div>
+    <strong>Name:</strong> @Model.UserDetails.Name
+</div>
+<div>
+    <strong>Email:</strong> @Model.UserDetails.Email
+</div>
+<div>
+    <strong>Role:</strong> @Model.UserDetails.Role
+</div>
+<img src="/userImages/@Model.UserDetails.ImageFileName" width="100" />
+<a asp-page="DisplayUsers" class="btn btn-secondary">Back to List</a>

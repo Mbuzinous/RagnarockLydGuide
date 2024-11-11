@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RagnarockTourGuide.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Kojg_Ragnarock_Guide.Models
 {
@@ -19,5 +20,6 @@ namespace Kojg_Ragnarock_Guide.Models
         public string? ImageFileName { get; set; }
         public string? AudioFileName { get; set; }
 
+        public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
     }
 }

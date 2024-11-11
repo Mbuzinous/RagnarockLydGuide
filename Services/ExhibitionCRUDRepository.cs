@@ -6,7 +6,7 @@ using RagnarockTourGuide.Interfaces;
 
 namespace RagnarockTourGuide.Services
 {
-    public class ExhibitionCRUDRepository : ICRUDRepository<Exhibition>
+    public class ExhibitionCRUDRepository : IExhibitionCRUDRepoistory<Exhibition>
     {
         private readonly string _connectionString;
         private IFIleRepository<IFormFile> _fileRepository;
@@ -19,7 +19,7 @@ namespace RagnarockTourGuide.Services
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _fileRepository = fileRepository;
         }
-        public async Task Create(Exhibition toBeCreatedExhibition)
+        public async Task CreateAsync(Exhibition toBeCreatedExhibition)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -102,7 +102,7 @@ namespace RagnarockTourGuide.Services
 
             return listOfAllExhibitions;
         }
-        public async Task Update(Exhibition toBeUpdatedExhibition, Exhibition oldExhibition)
+        public async Task UpdateAsync(Exhibition toBeUpdatedExhibition, Exhibition oldExhibition)
         {
                 using (SqlConnection conn = new SqlConnection(_connectionString))
                 {
@@ -149,7 +149,8 @@ namespace RagnarockTourGuide.Services
             }
             return filteredList;
         }
-        public async Task<List<int>> GetUsedExhibitionNumbersAsync()
+
+        public async Task<List<int>> GetUsedNumbersAsync()
         {
             List<int> usedNumbers = new List<int>();
 

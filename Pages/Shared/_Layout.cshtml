@@ -45,6 +45,31 @@
                                 <a class="active" asp-page="/Admin/CreateExhibition">Create Exhibition</a>
                             </div>
                         </li>
+                    </div
+                    <div class="navChildContent">
+                        <li class="dropDown navbarText">
+                            <a class="dropBtn">User Management</a>
+                            <div class="dropdown-content">
+                                <a class="active" asp-page="/MasterAdminPages/DisplayUsers">User List</a>
+                                <a class="active" asp-page="/MasterAdminPages/CreateUser">Create User</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div>
+                        @{
+                            if (Context.Session.GetString("UserRole") != null)
+                            {
+                                <li class="nav-item">
+                                <a class="nav-link" asp-page="/Account/Logout">Logout</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                <a class="nav-link" asp-page="/Account/Login">Login</a>
+                                </li>
+                            }
+                        }
                     </div>
                 </div>
             </div>
