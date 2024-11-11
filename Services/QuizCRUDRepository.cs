@@ -8,9 +8,10 @@ namespace RagnarockTourGuide.Services
     {
         private readonly string _connectionString;
 
-        public QuizCRUDRepository(string connectionString)
+
+        public QuizCRUDRepository(IConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         // Implementering af CRUD-metoder fra ICRUDRepository
@@ -82,7 +83,7 @@ namespace RagnarockTourGuide.Services
             return quizzes;
         }
 
-        public async Task UpdateAsync(Quiz quiz, Quiz quiz2)
+        public async Task UpdateAsync(Quiz quiz, Quiz notUsed)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {

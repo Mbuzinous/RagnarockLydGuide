@@ -1,0 +1,19 @@
+﻿@page
+@model RagnarockTourGuide.Pages.Quizzes.EditQuizModel
+@{
+}
+<h2>Edit Quiz</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label>Question</label>
+        <input asp-for="Quiz.Question" class="form-control" />
+        <span asp-validation-for="Quiz.Question" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Correct Answer</label>
+        <input asp-for="Quiz.CorrectAnswer" class="form-control" />
+        <span asp-validation-for="Quiz.CorrectAnswer" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

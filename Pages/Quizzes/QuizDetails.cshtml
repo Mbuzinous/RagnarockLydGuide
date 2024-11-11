@@ -1,0 +1,16 @@
+﻿@page
+@model RagnarockTourGuide.Pages.Quizzes.QuizDetailsModel
+@{
+}
+<h2>Quiz Details</h2>
+
+<div>
+    <div>
+        <strong>Question:</strong> @Model.Quiz.Question
+    </div>
+    <div>
+        <strong>Correct Answer:</strong> @Model.Quiz.CorrectAnswer
+    </div>
+</div>
+
+<a asp-page="DisplayQuizzes" class="btn btn-secondary">Back to List</a>

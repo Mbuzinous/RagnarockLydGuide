@@ -15,20 +15,20 @@ namespace RagnarockTourGuide.Services
         }
         public Role? ValidateUser(string email, string password)
         {
-            // Her skal kodeordet sammenlignes sikkert (fx med hashing) mod det gemte kodeord
+            // Husk at bruge hashning til adgangskoder i produktionen for sikkerhed
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                string query = "SELECT Role FROM Users WHERE Email = @Email AND Password = @Password";
+                string query = "SELECT RoleId FROM Users WHERE Email = @Email AND Password = @Password";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Email", email);
-                    cmd.Parameters.AddWithValue("@Password", password); // Husk at bruge hash til rigtige kodeord
+                    cmd.Parameters.AddWithValue("@Password", password); // Husk at bruge hash i stedet for klartekst
 
                     var result = cmd.ExecuteScalar();
-                    if (result != null && int.TryParse(result.ToString(), out int roleValue))
+                    if (result != null && int.TryParse(result.ToString(), out int roleId))
                     {
-                        return (Role)roleValue;
+                        return (Role)roleId;  // Cast resultatet til Role enum
                     }
                 }
             }

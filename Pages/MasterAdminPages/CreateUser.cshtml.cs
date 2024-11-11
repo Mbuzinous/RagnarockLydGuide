@@ -35,14 +35,14 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
             }
             return Page();
         }
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _repository.CreateAsync(NewUser);
+            await _repository.CreateAsync(NewUser);
             return RedirectToPage("DisplayUsers");
         }
     }

@@ -1,4 +1,6 @@
 ﻿using Kojg_Ragnarock_Guide.Interfaces;
+using Kojg_Ragnarock_Guide.Models;
+using Kojg_Ragnarock_Guide.Services;
 using Microsoft.Data.SqlClient;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces;
@@ -10,44 +12,55 @@ namespace RagnarockTourGuide.Services
 {
     public class UserCRUDRepository : IUserCRUDRepository<User>
     {
+        IFIleRepository<IFormFile> _fileRepository;
+
         private readonly string _connectionString;
-        private readonly IFIleRepository<IFormFile> _fileRepository;
-        private readonly string _imageFileTarget = "userImages";
+        private readonly string _audioFileTarget = "userImages";
+
 
         public UserCRUDRepository(IConfiguration configuration, IFIleRepository<IFormFile> fileRepository)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
             _fileRepository = fileRepository;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        // Create a new user
-        public async Task CreateAsync(User toBeCreatedUser)
+        public async Task CreateAsync(User user)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                string query = "INSERT INTO Users (Name, Email, Password, Role, ImageFileName) " +
-                               "VALUES (@Name, @Email, @Password, @Role, @ImageFileName)";
+                string query = @"
+            INSERT INTO Users (Name, Email, Password, RoleId, ImageFileName)
+            VALUES (@Name, @Email, @Password, @RoleId, @ImageFileName)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Name", toBeCreatedUser.Name);
-                cmd.Parameters.AddWithValue("@Email", toBeCreatedUser.Email);
-                cmd.Parameters.AddWithValue("@Password", toBeCreatedUser.Password);
-                cmd.Parameters.AddWithValue("@Role", (int)toBeCreatedUser.Role);
-                cmd.Parameters.AddWithValue("@ImageFileName", await _fileRepository.SaveFileAsync(toBeCreatedUser.ImageFile, _imageFileTarget));
+                cmd.Parameters.AddWithValue("@Name", user.Name);
+                cmd.Parameters.AddWithValue("@Email", user.Email);
+                cmd.Parameters.AddWithValue("@Password", user.Password);  // Husk at hash, hvis nødvendigt
+                cmd.Parameters.AddWithValue("@RoleId", (int)user.Role);
+                cmd.Parameters.AddWithValue("@ImageFileName", await _fileRepository.SaveFileAsync(user.ImageFile, _audioFileTarget));
 
-                conn.Open();
-                await cmd.ExecuteNonQueryAsync();
+                try
+                {
+                    conn.Open();
+                    await cmd.ExecuteNonQueryAsync();
+                }
+                catch (SqlException ex)
+                {
+                    // Log fejlmeddelelsen her
+                    Console.WriteLine($"SQL Error: {ex.Message}");
+                    throw;  // Eller håndter fejlen efter behov
+                }
             }
         }
 
-        // Get a user by ID
         public User GetById(int id)
         {
-            User userToGet = null;
+            User user = null;
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 string query = "SELECT * FROM Users WHERE Id = @Id";
+
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Id", id);
 
@@ -56,68 +69,68 @@ namespace RagnarockTourGuide.Services
                 {
                     if (reader.Read())
                     {
-                        userToGet = new User
+                        user = new User
                         {
-                            Id = Convert.ToInt32(reader["Id"]),
+                            Id = (int)reader["Id"],
                             Name = reader["Name"].ToString(),
                             Email = reader["Email"].ToString(),
                             Password = reader["Password"].ToString(),
-                            Role = (Role)Convert.ToInt32(reader["Role"]),
+                            Role = (Role)(int)reader["RoleId"],
                             ImageFileName = reader["ImageFileName"].ToString()
                         };
                     }
                 }
             }
 
-            return userToGet;
+            return user;
         }
 
-        // Get all users
         public List<User> GetAll()
         {
-            List<User> listOfAllUsers = new List<User>();
+            var users = new List<User>();
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 string query = "SELECT * FROM Users";
+
                 SqlCommand cmd = new SqlCommand(query, conn);
                 conn.Open();
-
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        listOfAllUsers.Add(new User
+                        users.Add(new User
                         {
-                            Id = Convert.ToInt32(reader["Id"]),
+                            Id = (int)reader["Id"],
                             Name = reader["Name"].ToString(),
                             Email = reader["Email"].ToString(),
                             Password = reader["Password"].ToString(),
-                            Role = (Role)Convert.ToInt32(reader["Role"]),
+                            Role = (Role)(int)reader["RoleId"],
                             ImageFileName = reader["ImageFileName"].ToString()
                         });
                     }
                 }
             }
 
-            return listOfAllUsers;
+            return users;
         }
 
-        // Update an existing user
-        public async Task UpdateAsync(User toBeUpdatedUser, User oldUser)
+        public async Task UpdateAsync(User user, User notUsed)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                string query = "UPDATE Users SET Name = @Name, Email = @Email, Password = @Password, " +
-                               "Role = @Role, ImageFileName = @ImageFileName WHERE Id = @Id";
+                string query = @"
+                    UPDATE Users SET Name = @Name, Email = @Email, Password = @Password, 
+                        RoleId = @RoleId, ImageFileName = @ImageFileName 
+                    WHERE Id = @Id";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Id", toBeUpdatedUser.Id);
-                cmd.Parameters.AddWithValue("@Name", toBeUpdatedUser.Name);
-                cmd.Parameters.AddWithValue("@Email", toBeUpdatedUser.Email);
-                cmd.Parameters.AddWithValue("@Password", toBeUpdatedUser.Password);
-                cmd.Parameters.AddWithValue("@Role", (int)toBeUpdatedUser.Role);
-                cmd.Parameters.AddWithValue("@ImageFileName", await _fileRepository.UpdateFileAsync(toBeUpdatedUser.ImageFile, oldUser.ImageFileName, _imageFileTarget));
+                cmd.Parameters.AddWithValue("@Id", user.Id);
+                cmd.Parameters.AddWithValue("@Name", user.Name);
+                cmd.Parameters.AddWithValue("@Email", user.Email);
+                cmd.Parameters.AddWithValue("@Password", user.Password);
+                cmd.Parameters.AddWithValue("@RoleId", (int)user.Role);
+                cmd.Parameters.AddWithValue("@ImageFileName", await _fileRepository.SaveFileAsync(user.ImageFile, _audioFileTarget));
 
                 conn.Open();
                 await cmd.ExecuteNonQueryAsync();

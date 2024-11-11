@@ -55,6 +55,15 @@
                             </div>
                         </li>
                     </div>
+                    <div class="navChildContent">
+                        <li class="dropDown navbarText">
+                            <a class="dropBtn">Quizzes</a>
+                            <div class="dropdown-content">
+                                <a class="active" asp-page="/Quizzes/DisplayQuizzes">Quiz List</a>
+                                <a class="active" asp-page="/Quizzes/CreateQuiz">Create Quiz</a>
+                            </div>
+                        </li>
+                    </div>
                     <div>
                         @{
                             if (Context.Session.GetString("UserRole") != null)

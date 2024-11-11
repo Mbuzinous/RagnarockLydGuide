@@ -24,6 +24,8 @@ namespace RagnarockTourGuide
             builder.Services.AddTransient<IUserValidator, UserValidator>();
 
 
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

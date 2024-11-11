@@ -1,0 +1,32 @@
+﻿@page
+@model RagnarockTourGuide.Pages.Quizzes.DisplayQuizzesModel
+@{
+}
+<h2>Quizzes</h2>
+<a asp-page="./Create">Create New Quiz</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Question</th>
+            <th>Correct Answer</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var quiz in Model.Quizzes)
+        {
+            <tr>
+                <td>@quiz.Id</td>
+                <td>@quiz.Question</td>
+                <td>@quiz.CorrectAnswer</td>
+                <td>
+                    <a asp-page="DisplayQuizzes" asp-route-id="@quiz.Id">Edit</a> |
+                    <a asp-page="QuizDetails" asp-route-id="@quiz.Id">Details</a> |
+                    <a asp-page="DeleteQuiz" asp-route-id="@quiz.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
