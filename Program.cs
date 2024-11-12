@@ -1,9 +1,8 @@
 using Kojg_Ragnarock_Guide.Interfaces;
 using Kojg_Ragnarock_Guide.Models;
-using Kojg_Ragnarock_Guide.Services;
-using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
-using RagnarockTourGuide.Services;
+using RagnarockTourGuide.Services.PreviousServices;
 
 namespace RagnarockTourGuide
 {

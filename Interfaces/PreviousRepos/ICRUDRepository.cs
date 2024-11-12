@@ -1,6 +1,6 @@
 ﻿using Kojg_Ragnarock_Guide.Models;
 
-namespace Kojg_Ragnarock_Guide.Interfaces
+namespace RagnarockTourGuide.Interfaces.PreviousRepos
 {
     public interface ICRUDRepository<T>
     {

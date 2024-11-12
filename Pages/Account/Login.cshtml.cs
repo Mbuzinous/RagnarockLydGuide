@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using RagnarockTourGuide.Enums;
-using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Interfaces.PreviousRepos;
 
 namespace RagnarockTourGuide.Pages.Account
 {

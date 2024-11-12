@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
 
 namespace RagnarockTourGuide.Pages.Quizzes

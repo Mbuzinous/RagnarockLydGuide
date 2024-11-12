@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
-using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Interfaces.PreviousRepos;
 
 namespace Kojg_Ragnarock_Guide.Pages.Exhibitions
 {

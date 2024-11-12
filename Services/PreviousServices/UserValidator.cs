@@ -2,9 +2,9 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using RagnarockTourGuide.Enums;
-using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Interfaces.PreviousRepos;
 
-namespace RagnarockTourGuide.Services
+namespace RagnarockTourGuide.Services.PreviousServices
 {
     public class UserValidator : IUserValidator
     {

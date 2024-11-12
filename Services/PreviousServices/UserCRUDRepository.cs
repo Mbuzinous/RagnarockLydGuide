@@ -3,12 +3,12 @@ using Kojg_Ragnarock_Guide.Models;
 using Kojg_Ragnarock_Guide.Services;
 using Microsoft.Data.SqlClient;
 using RagnarockTourGuide.Enums;
-using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RagnarockTourGuide.Services
+namespace RagnarockTourGuide.Services.PreviousServices
 {
     public class UserCRUDRepository : IUserCRUDRepository<User>
     {

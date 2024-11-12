@@ -2,9 +2,9 @@
 using Kojg_Ragnarock_Guide.Models;
 using Kojg_Ragnarock_Guide.Services;
 using Microsoft.Data.SqlClient;
-using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Interfaces.PreviousRepos;
 
-namespace RagnarockTourGuide.Services
+namespace RagnarockTourGuide.Services.PreviousServices
 {
     public class ExhibitionCRUDRepository : IExhibitionCRUDRepoistory<Exhibition>
     {

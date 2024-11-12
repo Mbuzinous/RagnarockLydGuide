@@ -1,7 +1,6 @@
-﻿using Kojg_Ragnarock_Guide.Interfaces;
-using Kojg_Ragnarock_Guide.Models;
+﻿using Kojg_Ragnarock_Guide.Models;
 
-namespace RagnarockTourGuide.Interfaces
+namespace RagnarockTourGuide.Interfaces.PreviousRepos
 {
     public interface IExhibitionCRUDRepoistory<T> : ICRUDRepository<T> where T : Exhibition
     {

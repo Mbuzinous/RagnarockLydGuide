@@ -1,7 +1,6 @@
-﻿using Kojg_Ragnarock_Guide.Interfaces;
-using RagnarockTourGuide.Models;
+﻿using RagnarockTourGuide.Models;
 
-namespace RagnarockTourGuide.Interfaces
+namespace RagnarockTourGuide.Interfaces.PreviousRepos
 {
     public interface IQuizCRUDRepository<T> : ICRUDRepository<T> where T : Quiz
     {

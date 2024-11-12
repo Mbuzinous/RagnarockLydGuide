@@ -1,4 +1,4 @@
-﻿namespace RagnarockTourGuide.Interfaces
+﻿namespace RagnarockTourGuide.Interfaces.PreviousRepos
 {
     public interface IFIleRepository<T>
     {

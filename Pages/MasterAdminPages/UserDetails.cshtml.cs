@@ -2,7 +2,7 @@ using Kojg_Ragnarock_Guide.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
-using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
 
 namespace RagnarockTourGuide.Pages.MasterAdminPages

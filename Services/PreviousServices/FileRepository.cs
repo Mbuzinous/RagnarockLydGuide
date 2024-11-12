@@ -1,7 +1,7 @@
 ﻿using Kojg_Ragnarock_Guide.Interfaces;
-using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Interfaces.PreviousRepos;
 
-namespace Kojg_Ragnarock_Guide.Services
+namespace RagnarockTourGuide.Services.PreviousServices
 {
     public class FileRepository : IFIleRepository<IFormFile>
     {

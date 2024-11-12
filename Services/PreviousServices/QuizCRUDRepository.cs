@@ -1,8 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
-using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
 
-namespace RagnarockTourGuide.Services
+namespace RagnarockTourGuide.Services.PreviousServices
 {
     public class QuizCRUDRepository : IQuizCRUDRepository<Quiz>
     {
@@ -35,11 +35,11 @@ namespace RagnarockTourGuide.Services
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                 conn.Open();
+                conn.Open();
                 using (SqlCommand cmd = new SqlCommand("SELECT * FROM Quizzes WHERE Id = @Id", conn))
                 {
                     cmd.Parameters.AddWithValue("@Id", id);
-                    using (SqlDataReader reader =  cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -62,10 +62,10 @@ namespace RagnarockTourGuide.Services
             var quizzes = new List<Quiz>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                 conn.Open();
+                conn.Open();
                 using (SqlCommand cmd = new SqlCommand("SELECT * FROM Quizzes", conn))
                 {
-                    using (SqlDataReader reader =  cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
