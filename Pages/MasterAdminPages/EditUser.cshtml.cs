@@ -21,7 +21,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
             _backendController = backendController;
         }
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             // Hent brugerens rolle fra sessionen
             Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
@@ -33,7 +33,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
                 return RedirectToPage("/Index");
             }
 
-            UserToEdit = _backendController.ReadRepository.GetById(id);
+            UserToEdit = await _backendController.ReadRepository.GetByIdAsync(id);
             if (UserToEdit == null)
             {
                 return RedirectToPage("DisplayUsers");
@@ -41,14 +41,14 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
             return Page();
         }
 
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            User oldUser = _backendController.ReadRepository.GetById(UserToEdit.Id);
+            User oldUser = await _backendController.ReadRepository.GetByIdAsync(UserToEdit.Id);
             await _backendController.UpdateRepository.UpdateAsync(UserToEdit, oldUser);
             return RedirectToPage("DisplayUsers");
         }

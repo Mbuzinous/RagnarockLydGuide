@@ -16,7 +16,7 @@ namespace RagnarockTourGuide.Pages.Admin
             _backendController = backendController;
         }
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
             // Hent brugerens rolle fra sessionen
             Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
@@ -28,14 +28,14 @@ namespace RagnarockTourGuide.Pages.Admin
                 return RedirectToPage("/Index");
             }
             //Validate ID
-            if (_backendController.ReadRepository.GetById(id) != null)
+            if (_backendController.ReadRepository.GetByIdAsync(id) != null)
             {
                 //Delete exhibition
                 DeleteParameter parameter = new DeleteParameter()
                 {
                     Id = id,
                 };
-                _backendController.DeleteRepository.Delete(parameter);
+                await _backendController.DeleteRepository.DeleteAsync(parameter);
 
                 return RedirectToPage("AdminEpisodePage");
             }

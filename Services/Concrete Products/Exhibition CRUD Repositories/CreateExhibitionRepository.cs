@@ -34,7 +34,7 @@ namespace RagnarockTourGuide.Services.CRUDServices
                 cmd.Parameters.AddWithValue("@ImageFileName", await _fileRepository.SaveFileAsync(exhibition.ImageFile, _imageFileTarget));
                 cmd.Parameters.AddWithValue("@AudioFileName", await _fileRepository.SaveFileAsync(exhibition.AudioFile, _audioFileTarget));
 
-                conn.Open();
+                await conn.OpenAsync();
                 await cmd.ExecuteNonQueryAsync();
             }
         }

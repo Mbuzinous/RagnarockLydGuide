@@ -35,7 +35,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products
 
                 try
                 {
-                    conn.Open();
+                    await conn.OpenAsync();
                     await cmd.ExecuteNonQueryAsync();
                 }
                 catch (SqlException ex)

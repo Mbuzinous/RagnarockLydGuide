@@ -1,4 +1,4 @@
-using RagnarockTourGuide.Models;
+    using RagnarockTourGuide.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
@@ -20,7 +20,7 @@ namespace RagnarockTourGuide.Pages.Exhibitions
             _backendController = backendController;
         }
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             // Hent brugerens rolle fra sessionen
             Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
@@ -35,11 +35,11 @@ namespace RagnarockTourGuide.Pages.Exhibitions
             FloorNr = id;
             if (id == 2 || id == 3)
             {
-                Exhibitions = _backendController.ReadRepository.FilterListByNumber(_backendController.ReadRepository.GetAll(), id);
+                Exhibitions = _backendController.ReadRepository.FilterListByNumber(await _backendController.ReadRepository.GetAllAsync(), id);
             }
             else
             {
-                Exhibitions = _backendController.ReadRepository.GetAll();
+                Exhibitions = await _backendController.ReadRepository.GetAllAsync();
             }
 
             return Page();

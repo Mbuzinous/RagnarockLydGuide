@@ -19,7 +19,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.User_CRUD_Repositories
             _fileRepository = fileRepository;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public User GetById(int id)
+        public async Task <User> GetByIdAsync(int id)
         {
             User user = null;
 
@@ -30,8 +30,8 @@ namespace RagnarockTourGuide.Services.Concrete_Products.User_CRUD_Repositories
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Id", id);
 
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                await conn.OpenAsync();
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                 {
                     if (reader.Read())
                     {
@@ -51,7 +51,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.User_CRUD_Repositories
             return user;
         }
 
-        public List<User> GetAll()
+        public async Task<List<User>> GetAllAsync()
         {
             var users = new List<User>();
 
@@ -60,8 +60,8 @@ namespace RagnarockTourGuide.Services.Concrete_Products.User_CRUD_Repositories
                 string query = "SELECT * FROM Users";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                await conn.OpenAsync();
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                 {
                     while (reader.Read())
                     {
@@ -91,6 +91,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.User_CRUD_Repositories
         {
             throw new NotImplementedException();
         }
+
 
     }
 }

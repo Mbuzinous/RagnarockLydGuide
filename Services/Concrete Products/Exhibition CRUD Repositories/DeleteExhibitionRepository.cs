@@ -18,7 +18,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.Exhibition_CRUD_Reposito
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _fileRepository = fileRepository;
         }
-        public void Delete(DeleteParameter parameter)
+        public async Task DeleteAsync(DeleteParameter parameter)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -26,8 +26,8 @@ namespace RagnarockTourGuide.Services.Concrete_Products.Exhibition_CRUD_Reposito
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Id", parameter.Id);
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                await conn.OpenAsync();
+                await cmd.ExecuteNonQueryAsync();
             }
         }
 

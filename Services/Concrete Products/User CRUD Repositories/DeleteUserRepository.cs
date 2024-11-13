@@ -19,7 +19,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.User_CRUD_Repositories
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
         // Delete method accepting only user ID, for compatibility with IDeleteRepository<T>
-        public void Delete(DeleteParameter parameter)
+        public async Task DeleteAsync(DeleteParameter parameter)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
@@ -30,9 +30,10 @@ namespace RagnarockTourGuide.Services.Concrete_Products.User_CRUD_Repositories
                 cmd.Parameters.AddWithValue("@TargetUserRole", parameter.TargetUserRole);
                 cmd.Parameters.AddWithValue("@TargetUserId", parameter.Id);
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                await conn.OpenAsync();
+                await cmd.ExecuteNonQueryAsync();
             }
+
         }
     }
 }

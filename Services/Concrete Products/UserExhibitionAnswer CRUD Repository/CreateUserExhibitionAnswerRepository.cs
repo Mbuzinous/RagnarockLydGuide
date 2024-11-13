@@ -4,11 +4,11 @@ using RagnarockTourGuide.Models;
 
 namespace RagnarockTourGuide.Services.Concrete_Products.UserExhibitionAnswer_CRUD_Repository
 {
-    public class CreateUserExhibitionAnswer : ICreateRepository<UserExhibitionAnswer>
+    public class CreateUserExhibitionAnswerRepository : ICreateRepository<UserExhibitionAnswer>
     {
         private readonly string _connectionString;
 
-        public CreateUserExhibitionAnswer(IConfiguration configuration)
+        public CreateUserExhibitionAnswerRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }

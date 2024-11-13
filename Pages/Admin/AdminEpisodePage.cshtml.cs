@@ -20,7 +20,7 @@ namespace RagnarockTourGuide.Pages.Admin
         {
             _backendController = backendController;
         }
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             // Hent brugerens rolle fra sessionen
             Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
@@ -33,11 +33,11 @@ namespace RagnarockTourGuide.Pages.Admin
             }
             if (FilterCriteria == 2 || FilterCriteria == 3)
             {
-                Exhibitions = _backendController.ReadRepository.FilterListByNumber(_backendController.ReadRepository.GetAll(), FilterCriteria);
+                Exhibitions = _backendController.ReadRepository.FilterListByNumber(await _backendController.ReadRepository.GetAllAsync(), FilterCriteria);
             }
             else
             {
-                Exhibitions = _backendController.ReadRepository.GetAll();
+                Exhibitions = await _backendController.ReadRepository.GetAllAsync();
             }
             return Page();
         }

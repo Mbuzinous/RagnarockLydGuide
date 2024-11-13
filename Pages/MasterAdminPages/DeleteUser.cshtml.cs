@@ -21,7 +21,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
             _backendController = backendController;
         }
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             // Hent brugerens rolle fra sessionen
             Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
@@ -33,7 +33,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
                 return RedirectToPage("/Index");
             }
 
-            UserToDelete = _backendController.ReadRepository.GetById(id);
+            UserToDelete = await _backendController.ReadRepository.GetByIdAsync(id);
             if (UserToDelete == null)
             {
                 return RedirectToPage("DisplayUsers");
@@ -41,7 +41,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             try
             {
@@ -56,7 +56,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
                 };
 
                 // Call the Delete method and pass roles and target ID
-                _backendController.DeleteRepository.Delete(parameter);
+                await _backendController.DeleteRepository.DeleteAsync(parameter);
 
                 // Redirect on successful deletion
                 return RedirectToPage("DisplayUsers");

@@ -35,7 +35,7 @@ namespace RagnarockTourGuide.Pages.Admin
                 return RedirectToPage("/Index");
             }
 
-            oldExhibition = _backendController.ReadRepository.GetById(id);
+            oldExhibition = await _backendController.ReadRepository.GetByIdAsync(id);
             toBeUpdatedExhibition = oldExhibition;
 
             var usedNumbers = await _backendController.ReadRepository.GetUsedNumbersAsync();

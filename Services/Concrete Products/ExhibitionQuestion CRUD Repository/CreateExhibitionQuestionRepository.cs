@@ -5,11 +5,11 @@ using RagnarockTourGuide.Models;
 
 namespace RagnarockTourGuide.Services.Concrete_Products.ExhibitionQuestionCRUDRepository
 {
-    public class CreateExhibitionQuestion : ICreateRepository<ExhibitionQuestion>
+    public class CreateExhibitionQuestionRepository : ICreateRepository<ExhibitionQuestion>
     {
         private readonly string _connectionString;
 
-        public CreateExhibitionQuestion(IConfiguration configuration)
+        public CreateExhibitionQuestionRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }

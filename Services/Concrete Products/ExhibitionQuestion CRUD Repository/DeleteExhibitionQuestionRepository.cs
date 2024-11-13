@@ -2,25 +2,26 @@
 using RagnarockTourGuide.Interfaces.FactoryInterfaces;
 using RagnarockTourGuide.Models;
 
-namespace RagnarockTourGuide.Services.Concrete_Products.Question_CRUD_Repository
+namespace RagnarockTourGuide.Services.Concrete_Products.ExhibitionQuestion_CRUD_Repository
 {
-    public class DeleteQuestionRepository : IDeleteRepository<Question>
+    public class DeleteExhibitionQuestionRepository : IDeleteRepository<ExhibitionQuestion>
     {
         private readonly string _connectionString;
 
-        public DeleteQuestionRepository(IConfiguration configuration)
+        public DeleteExhibitionQuestionRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
+
         public async Task DeleteAsync(DeleteParameter parameter)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var query = "DELETE FROM Questions WHERE Id = @QuestionId;";
+                var query = "DELETE FROM ExhibitionQuestions WHERE Id = @ExhibitionQuestionId;";
 
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@QuestionId", parameter.Id);
+                    command.Parameters.AddWithValue("@ExhibitionQuestionId", parameter.Id);
 
                     await connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();

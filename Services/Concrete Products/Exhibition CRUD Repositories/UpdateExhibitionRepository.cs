@@ -36,7 +36,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.Exhibition_CRUD_Reposito
                 cmd.Parameters.AddWithValue("@ImageFileName", await _fileRepository.UpdateFileAsync(toBeUpdatedExhibition.ImageFile, oldExhibition.ImageFileName, _imageFileTarget));
                 cmd.Parameters.AddWithValue("@AudioFileName", await _fileRepository.UpdateFileAsync(toBeUpdatedExhibition.AudioFile, oldExhibition.AudioFileName, _audioFileTarget));
 
-                conn.Open();
+                await conn.OpenAsync();
                 await cmd.ExecuteNonQueryAsync();
             }
         }

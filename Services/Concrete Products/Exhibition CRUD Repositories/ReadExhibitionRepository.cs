@@ -18,7 +18,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.Exhibition_CRUD_Reposito
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _fileRepository = fileRepository;
         }
-        public Exhibition GetById(int id)
+        public async Task<Exhibition> GetByIdAsync(int id)
         {
             Exhibition exhibition = null;
 
@@ -29,8 +29,8 @@ namespace RagnarockTourGuide.Services.Concrete_Products.Exhibition_CRUD_Reposito
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Id", id);
 
-                conn.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                await conn.OpenAsync();
+                using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                 {
                     if (reader.Read())
                     {
@@ -51,7 +51,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.Exhibition_CRUD_Reposito
             return exhibition;
         }
 
-        public List<Exhibition> GetAll()
+        public async Task<List<Exhibition>> GetAllAsync()
         {
             var exhibitions = new List<Exhibition>();
 
@@ -60,7 +60,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.Exhibition_CRUD_Reposito
                 string query = "SELECT * FROM Exhibitions";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-                conn.Open();
+                await conn.OpenAsync();
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -104,7 +104,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.Exhibition_CRUD_Reposito
                 string query = "SELECT ExhibitionNumber FROM Exhibitions";
                 SqlCommand cmd = new SqlCommand(query, conn);
 
-                conn.Open();
+                await conn.OpenAsync();
                 using (var reader = await cmd.ExecuteReaderAsync())
                 {
                     while (reader.Read())

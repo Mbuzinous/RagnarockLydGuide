@@ -35,7 +35,7 @@ namespace RagnarockTourGuide.Services.Concrete_Products.User_CRUD_Repositories
                 cmd.Parameters.AddWithValue("@RoleId", (int)user.Role);
                 cmd.Parameters.AddWithValue("@ImageFileName", await _fileRepository.SaveFileAsync(user.ImageFile, _audioFileTarget));
 
-                conn.Open();
+                await conn.OpenAsync();
                 await cmd.ExecuteNonQueryAsync();
             }
         }
