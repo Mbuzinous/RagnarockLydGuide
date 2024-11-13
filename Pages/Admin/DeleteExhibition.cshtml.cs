@@ -3,23 +3,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.Admin
 {
     public class DeleteExhibitionModel : PageModel
     {
-        private IExhibitionCRUDRepoistory<Exhibition> _repo;
+        private BackendController<Exhibition> _backendController;
 
-        private IUserValidator _userValidator;
-        public DeleteExhibitionModel(IExhibitionCRUDRepoistory<Exhibition> repository, IUserValidator userValidator)
+        public DeleteExhibitionModel(BackendController<Exhibition> backendController)
         {
-            _repo = repository;
-            _userValidator = userValidator;
+            _backendController = backendController;
         }
+
         public IActionResult OnGet(int id)
         {
             // Hent brugerens rolle fra sessionen
-            Role userRole = _userValidator.GetUserRole(HttpContext.Session);
+            Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
 
             // Tjek om brugeren har adgang baseret på rollen
             if (userRole != Role.Admin || userRole != Role.MasterAdmin)
@@ -28,10 +28,14 @@ namespace RagnarockTourGuide.Pages.Admin
                 return RedirectToPage("/Index");
             }
             //Validate ID
-            if (_repo.GetById(id) != null)
+            if (_backendController.ReadRepository.GetById(id) != null)
             {
-                //Delete Exhibition
-                _repo.Delete(id);
+                //Delete exhibition
+                DeleteParameter parameter = new DeleteParameter()
+                {
+                    Id = id,
+                };
+                _backendController.DeleteRepository.Delete(parameter);
 
                 return RedirectToPage("AdminEpisodePage");
             }

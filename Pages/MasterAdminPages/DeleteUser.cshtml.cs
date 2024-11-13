@@ -4,29 +4,27 @@ using Microsoft.Data.SqlClient;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.MasterAdminPages
 {
     public class DeleteUserModel : PageModel
     {
-        private readonly IUserCRUDRepository<User> _repository;
-
         [BindProperty]
         public User UserToDelete { get; set; }
         public string ErrorMessage { get; private set; } // Property to store error message
 
-        private IUserValidator _userValidator;
+        private BackendController<User> _backendController;
 
-        public DeleteUserModel(IUserCRUDRepository<User> repository, IUserValidator userValidator)
+        public DeleteUserModel(BackendController<User> backendController)
         {
-            _repository = repository;
-            _userValidator = userValidator;
+            _backendController = backendController;
         }
 
         public IActionResult OnGet(int id)
         {
             // Hent brugerens rolle fra sessionen
-            Role userRole = _userValidator.GetUserRole(HttpContext.Session);
+            Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
             
             // Tjek om brugeren har adgang baseret på rollen
             if (userRole != Role.MasterAdmin)
@@ -35,7 +33,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
                 return RedirectToPage("/Index");
             }
 
-            UserToDelete = _repository.GetById(id);
+            UserToDelete = _backendController.ReadRepository.GetById(id);
             if (UserToDelete == null)
             {
                 return RedirectToPage("DisplayUsers");
@@ -48,11 +46,17 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
             try
             {
                 // Retrieve roles for current and target users
-                Role currentUserRole = _userValidator.GetUserRole(HttpContext.Session);
+                Role currentUserRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
                 Role targetUserRole = UserToDelete.Role;
+                DeleteParameter parameter = new DeleteParameter()
+                {
+                    Id = UserToDelete.Id,
+                    CurrentUserRole = (int)currentUserRole,
+                    TargetUserRole = (int)targetUserRole
+                };
 
                 // Call the Delete method and pass roles and target ID
-                _repository.Delete((int)currentUserRole, (int)targetUserRole, UserToDelete.Id);
+                _backendController.DeleteRepository.Delete(parameter);
 
                 // Redirect on successful deletion
                 return RedirectToPage("DisplayUsers");

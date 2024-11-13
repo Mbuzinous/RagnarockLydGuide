@@ -3,30 +3,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.Admin
 {
 
     public class CreateExhibitionModel : PageModel
     {
-        private IExhibitionCRUDRepoistory<Exhibition> _repo;
-
         [BindProperty]
         public Exhibition Exhibition { get; set; }
 
         public List<int> SuggestedExhibitionNumbers { get; private set; } = new List<int>();
 
-        private IUserValidator _userValidator;
-        public CreateExhibitionModel(IExhibitionCRUDRepoistory<Exhibition> repository, IUserValidator userValidator)
-        {
-            _repo = repository;
-            _userValidator = userValidator;
-        }
+        private BackendController<Exhibition> _backendController;
 
+        public CreateExhibitionModel(BackendController<Exhibition> backendController)
+        {
+            _backendController = backendController;
+        }
         public async Task<IActionResult> OnGet()
         {
             // Hent brugerens rolle fra sessionen
-            Role userRole = _userValidator.GetUserRole(HttpContext.Session);
+            Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
 
             // Tjek om brugeren har adgang baseret på rollen
             if (userRole != Role.Admin || userRole != Role.MasterAdmin)
@@ -34,7 +32,7 @@ namespace RagnarockTourGuide.Pages.Admin
                 // Omdirigér til forsiden, hvis brugeren ikke har den nødvendige rolle
                 return RedirectToPage("/Index");
             }
-            var usedNumbers = await _repo.GetUsedNumbersAsync();
+            var usedNumbers = await _backendController.ReadRepository.GetUsedNumbersAsync();
             SuggestedExhibitionNumbers = Enumerable.Range(1, 100).Except(usedNumbers).ToList();
 
             return Page();
@@ -47,7 +45,7 @@ namespace RagnarockTourGuide.Pages.Admin
                 return Page();
             }
             //Save Exhibition
-            await _repo.CreateAsync(Exhibition);
+            await _backendController.CreateRepository.CreateAsync(Exhibition);
 
             ModelState.Clear();
 

@@ -5,6 +5,7 @@ using RagnarockTourGuide.Interfaces.CRUDFactoryInterfaces;
 using RagnarockTourGuide.Interfaces.FactoryInterfaces;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.MasterAdminPages
 {
@@ -12,18 +13,17 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
     {
         public List<User> Users { get; set; } = new List<User>();
 
-        private IUserValidator _userValidator;
-        private IReadRepository<User> _readRepository;
+        private BackendController<User> _backendController;
 
-        public DisplayUsersModel(ICRUDFactory<User> factory, IUserValidator userValidator)
+        public DisplayUsersModel(BackendController<User> backendController)
         {
-            _readRepository = factory.ReadRepository();
+            _backendController = backendController;
         }
 
         public IActionResult OnGet()
         {
             // Hent brugerens rolle fra sessionen
-            Role userRole = _userValidator.GetUserRole(HttpContext.Session);
+            Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
 
             // Tjek om brugeren har adgang baseret på rollen
             if (userRole != Role.MasterAdmin)
@@ -31,7 +31,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
                 // Omdirigér til forsiden, hvis brugeren ikke har den nødvendige rolle
                 return RedirectToPage("/Index");
             }
-            Users = _readRepository.GetAll();
+            Users = _backendController.ReadRepository.GetAll();
             return Page();
         }
     }

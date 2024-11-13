@@ -3,27 +3,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.MasterAdminPages
 {
     public class CreateUserModel : PageModel
     {
-        private readonly IUserCRUDRepository<User> _repository;
-
         [BindProperty]
         public User NewUser { get; set; } = new User();
 
-        private IUserValidator _userValidator;
-        public CreateUserModel(IUserCRUDRepository<User> repository, IUserValidator userValidator)
+        private BackendController<User> _backendController;
+
+        public CreateUserModel(BackendController<User> backendController)
         {
-            _repository = repository;
-            _userValidator = userValidator;
+            _backendController = backendController;
         }
 
         public IActionResult OnGet()
         {
             // Hent brugerens rolle fra sessionen
-            Role userRole = _userValidator.GetUserRole(HttpContext.Session);
+            Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
 
             // Tjek om brugeren har adgang baseret på rollen
             if (userRole != Role.MasterAdmin)
@@ -40,7 +39,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
                 return Page();
             }
 
-            await _repository.CreateAsync(NewUser);
+            await _backendController.CreateRepository.CreateAsync(NewUser);
             return RedirectToPage("DisplayUsers");
         }
     }

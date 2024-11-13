@@ -3,28 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.Exhibitions
 {
     public class FloorNumber : PageModel
     {
-        private IExhibitionCRUDRepoistory<Exhibition> _repo;
-
         public List<Exhibition> Exhibitions { get; private set; } = new List<Exhibition>();
 
         public int FloorNr { get; set; }
 
-        private IUserValidator _userValidator;
-        public FloorNumber(IExhibitionCRUDRepoistory<Exhibition> repository, IUserValidator userValidator)
+        private BackendController<Exhibition> _backendController;
+
+        public FloorNumber(BackendController<Exhibition> backendController)
         {
-            _repo = repository;
-            _userValidator = userValidator;
+            _backendController = backendController;
         }
 
         public IActionResult OnGet(int id)
         {
             // Hent brugerens rolle fra sessionen
-            Role userRole = _userValidator.GetUserRole(HttpContext.Session);
+            Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
 
             // Tjek om brugeren har adgang baseret på rollen
             if (userRole != Role.Member || userRole != Role.Admin || userRole != Role.MasterAdmin)
@@ -36,11 +35,11 @@ namespace RagnarockTourGuide.Pages.Exhibitions
             FloorNr = id;
             if (id == 2 || id == 3)
             {
-                Exhibitions = _repo.FilterListByNumber(_repo.GetAll(), id);
+                Exhibitions = _backendController.ReadRepository.FilterListByNumber(_backendController.ReadRepository.GetAll(), id);
             }
             else
             {
-                Exhibitions = _repo.GetAll();
+                Exhibitions = _backendController.ReadRepository.GetAll();
             }
 
             return Page();

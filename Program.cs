@@ -21,7 +21,6 @@ namespace RagnarockTourGuide
 
             builder.Services.AddTransient<ICRUDFactory<Exhibition>, ExhibitionCRUDFactory>();
             builder.Services.AddTransient<ICRUDFactory<User>, UserCRUDFactory>();
-            builder.Services.AddTransient<ICRUDFactory<Quiz>, QuizCRUDFactory>();
 
             builder.Services.AddTransient<IUserValidator, UserValidator>();
 

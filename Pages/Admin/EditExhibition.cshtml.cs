@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.Admin
 {
     public class EditExhibitionModel : PageModel
     {
-
-        private IExhibitionCRUDRepoistory<Exhibition> _repo;
-
         public Exhibition oldExhibition { get; set; } = new Exhibition();
 
         [BindProperty]
@@ -18,17 +16,17 @@ namespace RagnarockTourGuide.Pages.Admin
         public List<int> SuggestedExhibitionNumbers { get; private set; } = new List<int>();
 
 
-        private IUserValidator _userValidator;
-        public EditExhibitionModel(IExhibitionCRUDRepoistory<Exhibition> repository, IUserValidator userValidator)
+        private BackendController<Exhibition> _backendController;
+
+        public EditExhibitionModel(BackendController<Exhibition> backendController)
         {
-            _repo = repository;
-            _userValidator = userValidator;
+            _backendController = backendController;
         }
         //Making some empty string messages i use in html razer pages, lower i define them
         public async Task<IActionResult> OnGet(int id)
         {
             // Hent brugerens rolle fra sessionen
-            Role userRole = _userValidator.GetUserRole(HttpContext.Session);
+            Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
 
             // Tjek om brugeren har adgang baseret på rollen
             if (userRole != Role.Admin || userRole != Role.MasterAdmin)
@@ -37,10 +35,10 @@ namespace RagnarockTourGuide.Pages.Admin
                 return RedirectToPage("/Index");
             }
 
-            oldExhibition = _repo.GetById(id);
+            oldExhibition = _backendController.ReadRepository.GetById(id);
             toBeUpdatedExhibition = oldExhibition;
 
-            var usedNumbers = await _repo.GetUsedNumbersAsync();
+            var usedNumbers = await _backendController.ReadRepository.GetUsedNumbersAsync();
             SuggestedExhibitionNumbers = Enumerable.Range(1, 100).Except(usedNumbers).ToList();
 
             return Page();
@@ -53,7 +51,7 @@ namespace RagnarockTourGuide.Pages.Admin
                 return Page();
             }
             //Save Exhibition
-            await _repo.UpdateAsync(toBeUpdatedExhibition, oldExhibition);
+            await _backendController.UpdateRepository.UpdateAsync(toBeUpdatedExhibition, oldExhibition);
 
             ModelState.Clear();
 

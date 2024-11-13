@@ -19,6 +19,7 @@ namespace RagnarockTourGuide.Models
         public string? ImageFileName { get; set; }
         public string? AudioFileName { get; set; }
 
-        public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
+        // Navigation property
+        public ICollection<ExhibitionQuestion> ExhibitionQuestions { get; set; } = new List<ExhibitionQuestion>();
     }
 }

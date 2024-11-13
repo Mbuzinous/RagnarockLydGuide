@@ -12,5 +12,8 @@ namespace RagnarockTourGuide.Models
 
         public IFormFile? ImageFile { get; set; }
         public string? ImageFileName { get; set; }
+        // Navigation property for UserExhibitionAnswers relationship
+        public ICollection<UserExhibitionAnswer> UserExhibitionAnswers { get; set; } = new List<UserExhibitionAnswer>();
+
     }
 }

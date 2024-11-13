@@ -18,14 +18,13 @@ namespace RagnarockTourGuide.Services.Concrete_Products.Exhibition_CRUD_Reposito
             _connectionString = configuration.GetConnectionString("DefaultConnection");
             _fileRepository = fileRepository;
         }
-        public void Delete(int id)
+        public void Delete(DeleteParameter parameter)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 string query = "DELETE FROM Exhibitions WHERE Id = @Id";
-
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@Id", parameter.Id);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();

@@ -24,7 +24,7 @@ namespace RagnarockTourGuide.Services.ConcreteFactories
 
         public IDeleteRepository<User> DeleteRepository()
         {
-            throw new NotImplementedException();
+            return new DeleteUserRepository(_configuration, _fileRepository);
         }
 
         public IReadRepository<User> ReadRepository()

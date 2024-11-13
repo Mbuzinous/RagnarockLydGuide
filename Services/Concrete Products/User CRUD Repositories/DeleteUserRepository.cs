@@ -1,9 +1,11 @@
 ﻿using Microsoft.Data.SqlClient;
+using RagnarockTourGuide.Interfaces.FactoryInterfaces;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
+using RagnarockTourGuide.Models;
 
 namespace RagnarockTourGuide.Services.Concrete_Products.User_CRUD_Repositories
 {
-    public class DeleteUserRepository 
+    public class DeleteUserRepository : IDeleteRepository<User>
     {
         IFileHandler<IFormFile> _fileRepository;
 
@@ -16,46 +18,21 @@ namespace RagnarockTourGuide.Services.Concrete_Products.User_CRUD_Repositories
             _fileRepository = fileRepository;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        // Delete a user by ID
-        public void Delete(int currentUserRole, int targetUserRole, int targetUserId)
+        // Delete method accepting only user ID, for compatibility with IDeleteRepository<T>
+        public void Delete(DeleteParameter parameter)
         {
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-
-
                 string query = "EXEC DeleteUser @CurrentUserRole, @TargetUserRole, @TargetUserId";
-
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@CurrentUserRole", currentUserRole);
-                cmd.Parameters.AddWithValue("@TargetUserRole", targetUserRole);
-                cmd.Parameters.AddWithValue("@TargetUserId", targetUserId);
+
+                cmd.Parameters.AddWithValue("@CurrentUserRole", parameter.CurrentUserRole);
+                cmd.Parameters.AddWithValue("@TargetUserRole", parameter.TargetUserRole);
+                cmd.Parameters.AddWithValue("@TargetUserId", parameter.Id);
 
                 conn.Open();
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                }
-
-                catch (SqlException sqlEx)
-                {
-                    if (sqlEx.Number == 50003)
-                    {
-                        Console.WriteLine("Unauthorized: Cannot delete a user with the same or higher role.");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"SQL Error: {sqlEx.Message}");
-                    }
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"An unexpected error occurred: {ex.Message}");
-                    throw;
-                }
-
+                cmd.ExecuteNonQuery();
             }
         }
-
     }
 }
