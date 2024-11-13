@@ -7,6 +7,6 @@ namespace RagnarockTourGuide.Interfaces.CRUDFactoryInterfaces
         ICreateRepository<T> CreateRepository();
         IReadRepository<T> ReadRepository();
         IUpdateRepository<T> UpdateRepository();
-        IDeleteRepository<T> DeleteRepository();
+        IDeleteRepository<T>    DeleteRepository();
     }
 }

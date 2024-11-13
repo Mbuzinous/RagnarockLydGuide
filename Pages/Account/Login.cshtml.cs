@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Data.SqlClient;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 

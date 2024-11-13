@@ -2,7 +2,7 @@
 {
     public interface IDeleteRepository<T>
     {
-        void Delete();
+        void Delete(int id);
 
     }
 }

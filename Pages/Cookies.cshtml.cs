@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Kojg_Ragnarock_Guide.Pages
+namespace RagnarockTourGuide.Pages
 {
     public class CookiesModel : PageModel
     {

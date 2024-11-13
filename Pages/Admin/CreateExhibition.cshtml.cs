@@ -1,12 +1,10 @@
-using Kojg_Ragnarock_Guide.Interfaces;
-using Kojg_Ragnarock_Guide.Models;
-using Microsoft.AspNetCore.Authorization;
+using RagnarockTourGuide.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 
-namespace Kojg_Ragnarock_Guide.Pages.Admin
+namespace RagnarockTourGuide.Pages.Admin
 {
 
     public class CreateExhibitionModel : PageModel

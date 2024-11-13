@@ -1,14 +1,13 @@
-﻿using Kojg_Ragnarock_Guide.Interfaces;
-using RagnarockTourGuide.Interfaces.PreviousRepos;
+﻿using RagnarockTourGuide.Interfaces.PreviousRepos;
 
-namespace RagnarockTourGuide.Services.PreviousServices
+namespace RagnarockTourGuide.Services.Utilities
 {
-    public class FileRepository : IFIleRepository<IFormFile>
+    public class FileHandler : IFileHandler<IFormFile>
     {
         private readonly IWebHostEnvironment _environment;
 
 
-        public FileRepository(IWebHostEnvironment environment)
+        public FileHandler(IWebHostEnvironment environment)
         {
             _environment = environment;
         }

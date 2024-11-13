@@ -1,7 +1,6 @@
-﻿using RagnarockTourGuide.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Kojg_Ragnarock_Guide.Models
+namespace RagnarockTourGuide.Models
 {
     public class Exhibition
     {

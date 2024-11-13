@@ -1,8 +1,9 @@
-using Kojg_Ragnarock_Guide.Interfaces;
-using Kojg_Ragnarock_Guide.Models;
+using RagnarockTourGuide.Interfaces.CRUDFactoryInterfaces;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
+using RagnarockTourGuide.Services.ConcreteFactories;
 using RagnarockTourGuide.Services.PreviousServices;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide
 {
@@ -16,10 +17,12 @@ namespace RagnarockTourGuide
             builder.Services.AddRazorPages();
             builder.Services.AddSession();
 
-            builder.Services.AddTransient<IFIleRepository<IFormFile>, FileRepository>();
-            builder.Services.AddTransient<IQuizCRUDRepository<Quiz>, QuizCRUDRepository>();
-            builder.Services.AddTransient<IExhibitionCRUDRepoistory<Exhibition>, ExhibitionCRUDRepository>();
-            builder.Services.AddTransient<IUserCRUDRepository<User>, UserCRUDRepository>();
+            builder.Services.AddTransient<IFileHandler<IFormFile>, FileHandler>();
+
+            builder.Services.AddTransient<ICRUDFactory<Exhibition>, ExhibitionCRUDFactory>();
+            builder.Services.AddTransient<ICRUDFactory<User>, UserCRUDFactory>();
+            builder.Services.AddTransient<ICRUDFactory<Quiz>, QuizCRUDFactory>();
+
             builder.Services.AddTransient<IUserValidator, UserValidator>();
 
 

@@ -1,29 +1,29 @@
-using Kojg_Ragnarock_Guide.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
+using RagnarockTourGuide.Interfaces.CRUDFactoryInterfaces;
+using RagnarockTourGuide.Interfaces.FactoryInterfaces;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.MasterAdminPages
 {
     public class UserDetailsModel : PageModel
     {
-        private readonly IUserCRUDRepository<User> _repository;
-
         public User UserDetails { get; set; }
 
-        private IUserValidator _userValidator;
-        public UserDetailsModel(IUserCRUDRepository<User> repository, IUserValidator userValidator)
+        private BackendController<User> _backendController;
+
+        public UserDetailsModel(BackendController<User> backendController)
         {
-            _repository = repository;
-            _userValidator = userValidator;
+            _backendController = backendController;
         }
 
         public IActionResult OnGet(int id)
         {
             // Hent brugerens rolle fra sessionen
-            Role userRole = _userValidator.GetUserRole(HttpContext.Session);
+            Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
 
             // Tjek om brugeren har adgang baseret på rollen
             if (userRole != Role.MasterAdmin)
@@ -32,7 +32,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
                 return RedirectToPage("/Index");
             }
 
-            UserDetails = _repository.GetById(id);
+            UserDetails = _backendController.ReadRepository.GetById(id);
             if (UserDetails == null)
             {
                 return RedirectToPage("DisplayUsers");

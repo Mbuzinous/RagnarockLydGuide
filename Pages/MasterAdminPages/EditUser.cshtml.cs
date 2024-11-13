@@ -1,7 +1,8 @@
-using Kojg_Ragnarock_Guide.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
+using RagnarockTourGuide.Interfaces.CRUDFactoryInterfaces;
+using RagnarockTourGuide.Interfaces.FactoryInterfaces;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
 
@@ -9,15 +10,17 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
 {
     public class EditUserModel : PageModel
     {
-        private readonly IUserCRUDRepository<User> _repository;
-
         [BindProperty]
         public User UserToEdit { get; set; }
 
         private IUserValidator _userValidator;
-        public EditUserModel(IUserCRUDRepository<User> repository, IUserValidator userValidator)
+        private IReadRepository<User> _readRepository;
+        private IUpdateRepository<User> _updateRepository;
+
+        public EditUserModel(ICRUDFactory<User> factory, IUserValidator userValidator)
         {
-            _repository = repository;
+            _readRepository = factory.ReadRepository();
+            _updateRepository = factory.UpdateRepository();
             _userValidator = userValidator;
         }
 
@@ -33,7 +36,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
                 return RedirectToPage("/Index");
             }
 
-            UserToEdit = _repository.GetById(id);
+            UserToEdit = _readRepository.GetById(id);
             if (UserToEdit == null)
             {
                 return RedirectToPage("DisplayUsers");
@@ -48,8 +51,8 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
                 return Page();
             }
 
-            var oldUser = _repository.GetById(UserToEdit.Id);
-            await _repository.UpdateAsync(UserToEdit, oldUser);
+            User oldUser = _readRepository.GetById(UserToEdit.Id);
+            await _updateRepository.UpdateAsync(UserToEdit, oldUser);
             return RedirectToPage("DisplayUsers");
         }
     }

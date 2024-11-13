@@ -1,6 +1,4 @@
-﻿using Kojg_Ragnarock_Guide.Models;
-
-namespace RagnarockTourGuide.Models
+﻿namespace RagnarockTourGuide.Models
 {
     public class Quiz
     {

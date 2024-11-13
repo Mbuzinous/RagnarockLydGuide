@@ -1,7 +1,8 @@
-using Kojg_Ragnarock_Guide.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Enums;
+using RagnarockTourGuide.Interfaces.CRUDFactoryInterfaces;
+using RagnarockTourGuide.Interfaces.FactoryInterfaces;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
 
@@ -9,15 +10,14 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
 {
     public class DisplayUsersModel : PageModel
     {
-        private readonly IUserCRUDRepository<User> _repository;
-
         public List<User> Users { get; set; } = new List<User>();
 
         private IUserValidator _userValidator;
-        public DisplayUsersModel(IUserCRUDRepository<User> repository, IUserValidator userValidator)
+        private IReadRepository<User> _readRepository;
+
+        public DisplayUsersModel(ICRUDFactory<User> factory, IUserValidator userValidator)
         {
-            _repository = repository;
-            _userValidator = userValidator;
+            _readRepository = factory.ReadRepository();
         }
 
         public IActionResult OnGet()
@@ -31,7 +31,7 @@ namespace RagnarockTourGuide.Pages.MasterAdminPages
                 // Omdirigér til forsiden, hvis brugeren ikke har den nødvendige rolle
                 return RedirectToPage("/Index");
             }
-            Users = _repository.GetAll();
+            Users = _readRepository.GetAll();
             return Page();
         }
     }

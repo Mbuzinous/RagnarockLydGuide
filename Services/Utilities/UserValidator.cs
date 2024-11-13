@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Data.SqlClient;
 using RagnarockTourGuide.Enums;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 

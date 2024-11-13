@@ -1,17 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RagnarockTourGuide.Interfaces.CRUDFactoryInterfaces;
+using RagnarockTourGuide.Interfaces.FactoryInterfaces;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.Quizzes
 {
     public class DeleteQuizModel : PageModel
     {
-        private readonly IQuizCRUDRepository<Quiz> _quizRepository;
+        private BackendController<Quiz> _backendController;
 
-        public DeleteQuizModel(IQuizCRUDRepository<Quiz> quizRepository)
+        public DeleteQuizModel(BackendController<Quiz> backendController)
         {
-            _quizRepository = quizRepository;
+            _backendController = backendController;
         }
 
         [BindProperty]
@@ -19,7 +22,7 @@ namespace RagnarockTourGuide.Pages.Quizzes
 
         public IActionResult OnGet(int id)
         {
-            Quiz =  _quizRepository.GetById(id);
+            Quiz = _backendController.ReadRepository.GetById(id);
 
             if (Quiz == null)
             {
@@ -29,9 +32,9 @@ namespace RagnarockTourGuide.Pages.Quizzes
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int id)
+        public IActionResult OnPost(int id)
         {
-            await _quizRepository.DeleteAsync(id);
+            _backendController.DeleteRepository.Delete(id);
             return RedirectToPage("DisplayQuizzes");
         }
     }

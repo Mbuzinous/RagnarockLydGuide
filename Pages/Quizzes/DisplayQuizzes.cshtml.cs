@@ -1,24 +1,26 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RagnarockTourGuide.Interfaces.CRUDFactoryInterfaces;
+using RagnarockTourGuide.Interfaces.FactoryInterfaces;
 using RagnarockTourGuide.Interfaces.PreviousRepos;
 using RagnarockTourGuide.Models;
+using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.Quizzes
 {
     public class DisplayQuizzesModel : PageModel
     {
-        private readonly IQuizCRUDRepository<Quiz>_quizRepository;
+        private BackendController<Quiz> _backendController;
 
-        public DisplayQuizzesModel(IQuizCRUDRepository<Quiz> quizRepository)
+        public DisplayQuizzesModel(BackendController<Quiz> backendController)
         {
-            _quizRepository = quizRepository;
+            _backendController = backendController;
         }
 
         public List<Quiz> Quizzes { get; set; }
 
         public void OnGet()
         {
-            Quizzes = _quizRepository.GetAll();
+            Quizzes = _backendController.ReadRepository.GetAll();
         }
     }
 }
