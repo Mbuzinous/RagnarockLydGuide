@@ -1,9 +1,7 @@
 using RagnarockTourGuide.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using RagnarockTourGuide.Enums;
-using RagnarockTourGuide.Interfaces.PreviousRepos;
-using RagnarockTourGuide.Services.Utilities;
+using RagnarockTourGuide.Models.Enums;
 
 namespace RagnarockTourGuide.Pages.Admin
 {
@@ -37,6 +35,8 @@ namespace RagnarockTourGuide.Pages.Admin
 
             oldExhibition = await _backendController.ReadRepository.GetByIdAsync(id);
             toBeUpdatedExhibition = oldExhibition;
+            toBeUpdatedExhibition.OldImageFileName = oldExhibition.ImageFileName;
+            toBeUpdatedExhibition.OldAudioFileName = oldExhibition.AudioFileName;
 
             var usedNumbers = await _backendController.ReadRepository.GetUsedNumbersAsync();
             SuggestedExhibitionNumbers = Enumerable.Range(1, 100).Except(usedNumbers).ToList();
@@ -51,7 +51,7 @@ namespace RagnarockTourGuide.Pages.Admin
                 return Page();
             }
             //Save Exhibition
-            await _backendController.UpdateRepository.UpdateAsync(toBeUpdatedExhibition, oldExhibition);
+            await _backendController.UpdateRepository.UpdateAsync(toBeUpdatedExhibition);
 
             ModelState.Clear();
 

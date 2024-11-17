@@ -1,10 +1,3 @@
-using RagnarockTourGuide.Interfaces.CRUDFactoryInterfaces;
-using RagnarockTourGuide.Interfaces.PreviousRepos;
-using RagnarockTourGuide.Models;
-using RagnarockTourGuide.Services.ConcreteFactories;
-using RagnarockTourGuide.Services.PreviousServices;
-using RagnarockTourGuide.Services.Utilities;
-
 namespace RagnarockTourGuide
 {
     public class Program
@@ -18,11 +11,13 @@ namespace RagnarockTourGuide
             builder.Services.AddSession();
 
             builder.Services.AddTransient<IFileHandler<IFormFile>, FileHandler>();
-
-            builder.Services.AddTransient<ICRUDFactory<Exhibition>, ExhibitionCRUDFactory>();
-            builder.Services.AddTransient<ICRUDFactory<User>, UserCRUDFactory>();
-
             builder.Services.AddTransient<IUserValidator, UserValidator>();
+
+            builder.Services.AddTransient<ICRUDRepository<ExhibitionQuestion>, ExhibitionQuestionRepository>();
+            builder.Services.AddTransient<ICRUDRepository<Exhibition>, ExhibitionRepository>();
+            builder.Services.AddTransient<ICRUDRepository<Question>, QuestionRepository>();
+            builder.Services.AddTransient<ICRUDRepository<UserExhibitionAnswer>, UserExhibitionAnswerRepository>();
+            builder.Services.AddTransient<ICRUDRepository<User>, UserRepository>();
 
 
 

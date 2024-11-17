@@ -1,6 +1,6 @@
-﻿using RagnarockTourGuide.Interfaces.PreviousRepos;
+﻿using RagnarockTourGuide.Interfaces;
 
-namespace RagnarockTourGuide.Services.Utilities
+namespace RagnarockTourGuide.Services
 {
     public class FileHandler : IFileHandler<IFormFile>
     {

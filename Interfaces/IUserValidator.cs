@@ -1,6 +1,6 @@
-﻿using RagnarockTourGuide.Enums;
+﻿using RagnarockTourGuide.Models.Enums;
 
-namespace RagnarockTourGuide.Interfaces.PreviousRepos
+namespace RagnarockTourGuide.Interfaces
 {
     public interface IUserValidator
     {

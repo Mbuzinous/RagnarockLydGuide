@@ -50,6 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\Utilities\" />
     <Folder Include="wwwroot\exhibitionImages\" />
     <Folder Include="wwwroot\exhibitionAudios\" />
     <Folder Include="wwwroot\userImages\" />

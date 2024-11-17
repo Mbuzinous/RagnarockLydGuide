@@ -1,9 +1,9 @@
 using RagnarockTourGuide.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using RagnarockTourGuide.Enums;
-using RagnarockTourGuide.Interfaces.PreviousRepos;
-using RagnarockTourGuide.Services.Utilities;
+using RagnarockTourGuide.Models.Enums;
+using RagnarockTourGuide.Interfaces;
+using RagnarockTourGuide.BackendController;
 
 namespace RagnarockTourGuide.Pages.Admin
 {
@@ -14,16 +14,20 @@ namespace RagnarockTourGuide.Pages.Admin
         [BindProperty(SupportsGet = true)]
         public int FilterCriteria { get; set; }
 
-        private BackendController<Exhibition> _backendController;
+        private ICRUDRepository<Exhibition> _crudRepo;
+        private IUserValidator _userRepository;
 
-        public AdminEpisodePage(BackendController<Exhibition> backendController)
+
+        public AdminEpisodePage(ICRUDRepository<Exhibition> repository, IUserValidator userValidator)
         {
-            _backendController = backendController;
+            _crudRepo = repository;
+            _userRepository = userValidator;
         }
+
         public async Task<IActionResult> OnGetAsync()
         {
             // Hent brugerens rolle fra sessionen
-            Role userRole = _backendController.UserValidator.GetUserRole(HttpContext.Session);
+            Role userRole = _userRepository.GetUserRole(HttpContext.Session);
 
             // Tjek om brugeren har adgang baseret på rollen
             if (userRole != Role.Admin || userRole != Role.MasterAdmin)
@@ -33,11 +37,11 @@ namespace RagnarockTourGuide.Pages.Admin
             }
             if (FilterCriteria == 2 || FilterCriteria == 3)
             {
-                Exhibitions = _backendController.ReadRepository.FilterListByNumber(await _backendController.ReadRepository.GetAllAsync(), FilterCriteria);
+                Exhibitions = _crudRepo.FilterListByNumber(await _crudRepo.GetAllAsync(), FilterCriteria);
             }
             else
             {
-                Exhibitions = await _backendController.ReadRepository.GetAllAsync();
+                Exhibitions = await _crudRepo.GetAllAsync();
             }
             return Page();
         }

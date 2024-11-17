@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RagnarockTourGuide.BackendController;
+using RagnarockTourGuide.Interfaces;
 using RagnarockTourGuide.Models;
-using RagnarockTourGuide.Interfaces.PreviousRepos;
-using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.Admin
 {
@@ -11,39 +11,34 @@ namespace RagnarockTourGuide.Pages.Admin
         [BindProperty]
         public Exhibition Exhibition { get; set; }
 
-        [BindProperty]
-        public List<int> SelectedQuestions { get; set; }
-
         public List<Question> Questions { get; private set; }
+        public List<Question> SelectedQuestions { get; set; }
 
-        private readonly BackendController<Exhibition> _exhibitionController;
-        private readonly BackendController<Question> _questionController;
-        private readonly BackendController<ExhibitionQuestion> _exhibitionQuestionController;
 
-        public CreateExhibitionModel(BackendController<Exhibition> exhibitionController,
-                                     BackendController<Question> questionController,
-                                     BackendController<ExhibitionQuestion> exhibitionQuestionController)
+        private ICRUDRepository<Exhibition> _crudRepo;
+        private IUserValidator _userRepository;
+
+        public CreateExhibitionModel(ICRUDRepository<Exhibition> repository, IUserValidator userValidator)
         {
-            _exhibitionController = exhibitionController;
-            _questionController = questionController;
-            _exhibitionQuestionController = exhibitionQuestionController; // Added injection for ExhibitionQuestion
+            _crudRepo = repository;
+            _userRepository = userValidator;
         }
 
         public async Task OnGetAsync()
         {
-            Questions = await _questionController.ReadRepository.GetAllAsync();
+            Questions = await _questionBackendController.CRUDRepository.GetAllAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                Questions = await _questionController.ReadRepository.GetAllAsync();
+                Questions = await _questionBackendController.CRUDRepository.GetAllAsync();
                 return Page();
             }
 
             // Save Exhibition
-            await _exhibitionController.CreateRepository.CreateAsync(Exhibition);
+            await _exhibitionBackendController.CRUDRepository.CreateAsync(Exhibition);
 
             // Link Selected Questions
             foreach (var questionId in SelectedQuestions)

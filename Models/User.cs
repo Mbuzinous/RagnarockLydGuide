@@ -1,4 +1,4 @@
-﻿using RagnarockTourGuide.Enums;
+﻿using RagnarockTourGuide.Models.Enums;
 
 namespace RagnarockTourGuide.Models
 {

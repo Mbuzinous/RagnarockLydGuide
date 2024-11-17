@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RagnarockTourGuide.Models;
-using RagnarockTourGuide.Interfaces.PreviousRepos;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using RagnarockTourGuide.Services.Utilities;
 
 namespace RagnarockTourGuide.Pages.Exhibitions
 {

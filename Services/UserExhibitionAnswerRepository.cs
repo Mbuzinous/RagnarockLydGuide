@@ -1,18 +1,52 @@
 ﻿using Microsoft.Data.SqlClient;
-using RagnarockTourGuide.Interfaces.FactoryInterfaces;
+using RagnarockTourGuide.Interfaces;
 using RagnarockTourGuide.Models;
 
-namespace RagnarockTourGuide.Services.Concrete_Products.UserExhibitionAnswer_CRUD_Repository
+namespace RagnarockTourGuide.Services
 {
-    public class ReadUserExhibitionAnswerRepository : IReadRepository<UserExhibitionAnswer>
+    public class UserExhibitionAnswerRepository : ICRUDRepository<UserExhibitionAnswer>
     {
         private readonly string _connectionString;
 
-        public ReadUserExhibitionAnswerRepository(IConfiguration configuration)
+        public UserExhibitionAnswerRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
+        public async Task CreateAsync(UserExhibitionAnswer userAnswer)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"INSERT INTO UserExhibitionAnswers (UserId, ExhibitionQuestionId, UserAnswer, AnsweredAt)
+                            VALUES (@UserId, @ExhibitionQuestionId, @UserAnswer, @AnsweredAt);";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@UserId", userAnswer.UserId);
+                    command.Parameters.AddWithValue("@ExhibitionQuestionId", userAnswer.ExhibitionQuestionId);
+                    command.Parameters.AddWithValue("@UserAnswer", userAnswer.UserAnswer);
+                    command.Parameters.AddWithValue("@AnsweredAt", userAnswer.AnsweredAt);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+        public async Task DeleteAsync(DeleteParameter parameter)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "DELETE FROM UserExhibitionAnswers WHERE Id = @UserExhibitionAnswerId;";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@UserExhibitionAnswerId", parameter.Id);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
         public async Task<UserExhibitionAnswer> GetByIdAsync(int id)
         {
             UserExhibitionAnswer userExhibitionAnswer = null;
@@ -142,5 +176,26 @@ namespace RagnarockTourGuide.Services.Concrete_Products.UserExhibitionAnswer_CRU
 
             return usedIds;
         }
+        public async Task UpdateAsync(UserExhibitionAnswer toBeUpdatedAnswer)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    UPDATE UserExhibitionAnswers 
+                    SET UserAnswer = @UserAnswer, 
+                        AnsweredAt = @AnsweredAt
+                    WHERE Id = @Id";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Id", toBeUpdatedAnswer.Id);
+                cmd.Parameters.AddWithValue("@UserAnswer", toBeUpdatedAnswer.UserAnswer);
+                cmd.Parameters.AddWithValue("@AnsweredAt", toBeUpdatedAnswer.AnsweredAt);
+
+                await conn.OpenAsync();
+                await cmd.ExecuteNonQueryAsync();
+            }
+        }
+
+
     }
 }

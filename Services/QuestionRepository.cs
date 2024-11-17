@@ -1,18 +1,51 @@
 ﻿using Microsoft.Data.SqlClient;
-using RagnarockTourGuide.Interfaces.FactoryInterfaces;
+using RagnarockTourGuide.Interfaces;
 using RagnarockTourGuide.Models;
 
-namespace RagnarockTourGuide.Services.Concrete_Products.Question_CRUD_Repository
+namespace RagnarockTourGuide.Services
 {
-    public class ReadQuestionRepository : IReadRepository<Question>
+    public class QuestionRepository : ICRUDRepository<Question>
     {
         private readonly string _connectionString;
 
-        public ReadQuestionRepository(IConfiguration configuration)
+        public QuestionRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
+        public async Task CreateAsync(Question question)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"
+            INSERT INTO Questions (QuestionText, RealAnswer)
+            VALUES (@QuestionText, @RealAnswer);
+        ";
 
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@QuestionText", question.QuestionText);
+                    command.Parameters.AddWithValue("@RealAnswer", question.RealAnswer);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+        public async Task DeleteAsync(DeleteParameter parameter)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "DELETE FROM Questions WHERE Id = @QuestionId;";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@QuestionId", parameter.Id);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
         public async Task<Question> GetByIdAsync(int id)
         {
             Question question = null;
@@ -105,5 +138,26 @@ namespace RagnarockTourGuide.Services.Concrete_Products.Question_CRUD_Repository
 
             return usedIds;
         }
+        public async Task UpdateAsync(Question toBeUpdatedQuestion)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    UPDATE Questions 
+                    SET QuestionText = @QuestionText, 
+                        RealAnswer = @RealAnswer
+                    WHERE Id = @Id";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Id", toBeUpdatedQuestion.Id);
+                cmd.Parameters.AddWithValue("@QuestionText", toBeUpdatedQuestion.QuestionText ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@RealAnswer", toBeUpdatedQuestion.RealAnswer);
+
+                await conn.OpenAsync();
+                await cmd.ExecuteNonQueryAsync();
+            }
+        }
+
+
     }
 }

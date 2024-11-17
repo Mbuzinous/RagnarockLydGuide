@@ -1,4 +1,4 @@
-﻿namespace RagnarockTourGuide.Enums
+﻿namespace RagnarockTourGuide.Models.Enums
 {
     public enum Role
     {

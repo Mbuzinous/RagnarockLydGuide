@@ -1,18 +1,52 @@
 ﻿using Microsoft.Data.SqlClient;
-using RagnarockTourGuide.Interfaces.FactoryInterfaces;
+using RagnarockTourGuide.Interfaces;
 using RagnarockTourGuide.Models;
 
-namespace RagnarockTourGuide.Services.Concrete_Products.ExhibitionQuestion_CRUD_Repository
+namespace RagnarockTourGuide.Services
 {
-    public class ReadExhibitionQuestionRepository : IReadRepository<ExhibitionQuestion>
+    public class ExhibitionQuestionRepository : ICRUDRepository<ExhibitionQuestion>
     {
         private readonly string _connectionString;
 
-        public ReadExhibitionQuestionRepository(IConfiguration configuration)
+        public ExhibitionQuestionRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
+        public async Task CreateAsync(ExhibitionQuestion exhibitionQuestion)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = @"
+            INSERT INTO ExhibitionQuestions (ExhibitionId, QuestionId, IsTheAnswerTrue)
+            VALUES (@ExhibitionId, @QuestionId, @IsTheAnswerTrue);
+        ";
 
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@ExhibitionId", exhibitionQuestion.Id);
+                    command.Parameters.AddWithValue("@QuestionId", exhibitionQuestion.QuestionId);
+                    command.Parameters.AddWithValue("@IsTheAnswerTrue", exhibitionQuestion.IsTheAnswerTrue);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+        public async Task DeleteAsync(DeleteParameter parameter)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var query = "DELETE FROM ExhibitionQuestions WHERE Id = @ExhibitionQuestionId;";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@ExhibitionQuestionId", parameter.Id);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
         public async Task<ExhibitionQuestion> GetByIdAsync(int id)
         {
             ExhibitionQuestion exhibitionQuestion = null;
@@ -128,5 +162,27 @@ namespace RagnarockTourGuide.Services.Concrete_Products.ExhibitionQuestion_CRUD_
 
             return usedQuestionIds;
         }
+        public async Task UpdateAsync(ExhibitionQuestion toBeUpdatedExhibitionQuestion)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    UPDATE ExhibitionQuestions SET 
+                        ExhibitionId = @ExhibitionId, 
+                        QuestionId = @QuestionId, 
+                        IsTheAnswerTrue = @IsTheAnswerTrue 
+                    WHERE Id = @Id";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Id", toBeUpdatedExhibitionQuestion.Id);
+                cmd.Parameters.AddWithValue("@ExhibitionId", toBeUpdatedExhibitionQuestion.ExhibitionId);
+                cmd.Parameters.AddWithValue("@QuestionId", toBeUpdatedExhibitionQuestion.QuestionId);
+                cmd.Parameters.AddWithValue("@IsTheAnswerTrue", toBeUpdatedExhibitionQuestion.IsTheAnswerTrue);
+
+                await conn.OpenAsync();
+                await cmd.ExecuteNonQueryAsync();
+            }
+        }
+
     }
 }
